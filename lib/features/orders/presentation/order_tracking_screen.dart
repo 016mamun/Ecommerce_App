@@ -6,6 +6,7 @@ import '../domain/providers/order_provider.dart';
 import '../data/models/order_model.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 class OrderTrackingScreen extends ConsumerWidget {
   final String orderId;
@@ -16,7 +17,7 @@ class OrderTrackingScreen extends ConsumerWidget {
     final ordersAsync = ref.watch(ordersProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
         title: const Text('Track Order', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
         leading: GestureDetector(
@@ -43,9 +44,9 @@ class OrderTrackingScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppColors.darkCard,
+                  color: context.cardColor,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.darkBorder),
+                  border: Border.all(color: context.borderColor),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +60,7 @@ class OrderTrackingScreen extends ConsumerWidget {
               const SizedBox(height: AppSizes.xl),
 
               // Tracking Timeline
-              const Text('Order Status', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: AppColors.textPrimary)),
+              Text('Order Status', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16, color: context.textPrimaryColor)),
               const SizedBox(height: AppSizes.md),
 
               const _TrackingStep(
@@ -127,21 +128,21 @@ class _TrackingStep extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: isCompleted ? AppColors.primary : (isActive ? AppColors.primary.withValues(alpha: 0.2) : AppColors.darkSurface),
+                color: isCompleted ? AppColors.primary : (isActive ? AppColors.primary.withValues(alpha: 0.2) : context.surfaceColor),
                 shape: BoxShape.circle,
-                border: Border.all(color: isActive || isCompleted ? AppColors.primary : AppColors.darkBorder),
+                border: Border.all(color: isActive || isCompleted ? AppColors.primary : context.borderColor),
               ),
               child: Icon(
                 icon,
                 size: 16,
-                color: isCompleted ? Colors.white : (isActive ? AppColors.primary : AppColors.textMuted),
+                color: isCompleted ? Colors.white : (isActive ? AppColors.primary : context.textMutedColor),
               ),
             ),
             if (!isLast)
               Container(
                 width: 2,
                 height: 40,
-                color: isCompleted ? AppColors.primary : AppColors.darkBorder,
+                color: isCompleted ? AppColors.primary : context.borderColor,
               ),
           ],
         ),
@@ -150,9 +151,9 @@ class _TrackingStep extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: TextStyle(fontWeight: isActive || isCompleted ? FontWeight.w600 : FontWeight.w400, fontSize: 14, color: isActive || isCompleted ? AppColors.textPrimary : AppColors.textMuted)),
+              Text(title, style: TextStyle(fontWeight: isActive || isCompleted ? FontWeight.w600 : FontWeight.w400, fontSize: 14, color: isActive || isCompleted ? context.textPrimaryColor : context.textMutedColor)),
               const SizedBox(height: 4),
-              Text(subtitle, style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+              Text(subtitle, style: TextStyle(fontSize: 12, color: context.textSecondaryColor)),
               const SizedBox(height: 24),
             ],
           ),

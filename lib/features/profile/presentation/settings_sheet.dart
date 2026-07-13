@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/theme/app_theme_colors.dart';
+import '../../../../core/theme/theme_provider.dart';
 
-// Settings state
+// Notification settings state
 final _notifOrderProvider = StateProvider<bool>((ref) => true);
 final _notifPromoProvider = StateProvider<bool>((ref) => true);
 final _notifNewsProvider = StateProvider<bool>((ref) => false);
-final _darkModeProvider = StateProvider<bool>((ref) => true);
 final _biometricProvider = StateProvider<bool>((ref) => false);
 
 class SettingsSheet extends ConsumerWidget {
@@ -19,13 +20,13 @@ class SettingsSheet extends ConsumerWidget {
     final notifOrder = ref.watch(_notifOrderProvider);
     final notifPromo = ref.watch(_notifPromoProvider);
     final notifNews = ref.watch(_notifNewsProvider);
-    final darkMode = ref.watch(_darkModeProvider);
     final biometric = ref.watch(_biometricProvider);
+    final isDark = ref.watch(themeModeProvider) == ThemeMode.dark;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: context.surfaceColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.all(AppSizes.md),
       child: Column(
@@ -35,23 +36,28 @@ class SettingsSheet extends ConsumerWidget {
           Container(
             width: 40,
             height: 4,
-            decoration: BoxDecoration(color: AppColors.darkBorder, borderRadius: BorderRadius.circular(2)),
+            decoration: BoxDecoration(color: context.borderColor, borderRadius: BorderRadius.circular(2)),
           ),
           const SizedBox(height: AppSizes.md),
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
-            child: Text('Settings', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+            child: Text(
+              'Settings',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: context.textPrimaryColor),
+            ),
           ),
           const SizedBox(height: AppSizes.md),
 
           // Appearance
           _SectionTitle('Appearance'),
           _SettingsToggle(
-            icon: Iconsax.moon,
+            icon: isDark ? Iconsax.moon : Iconsax.sun_1,
             title: 'Dark Mode',
-            subtitle: 'Enable dark theme',
-            value: darkMode,
-            onChanged: (v) => ref.read(_darkModeProvider.notifier).state = v,
+            subtitle: isDark ? 'Switch to light theme' : 'Switch to dark theme',
+            value: isDark,
+            onChanged: (v) => ref.read(themeModeProvider.notifier).setMode(
+              v ? ThemeMode.dark : ThemeMode.light,
+            ),
           ),
 
           const SizedBox(height: AppSizes.sm),
@@ -107,8 +113,8 @@ class _SectionTitle extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           title.toUpperCase(),
-          style: const TextStyle(
-            color: AppColors.textMuted,
+          style: TextStyle(
+            color: context.textMutedColor,
             fontSize: 11,
             fontWeight: FontWeight.w600,
             letterSpacing: 1.2,
@@ -140,34 +146,34 @@ class _SettingsToggle extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.darkBg,
+        color: context.bgColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: context.borderColor),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.darkSurface,
+              color: context.surfaceColor,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: AppColors.textPrimary, size: 18),
+            child: Icon(icon, color: context.textPrimaryColor, size: 18),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w500)),
-                Text(subtitle, style: const TextStyle(color: AppColors.textSecondary, fontSize: 11)),
+                Text(title, style: TextStyle(color: context.textPrimaryColor, fontSize: 14, fontWeight: FontWeight.w500)),
+                Text(subtitle, style: TextStyle(color: context.textSecondaryColor, fontSize: 11)),
               ],
             ),
           ),
           Switch(
             value: value,
             onChanged: onChanged,
-            activeThumbColor: AppColors.primary,
+            activeTrackColor: AppColors.primary,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
         ],

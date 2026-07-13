@@ -6,6 +6,7 @@ import '../domain/providers/auth_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
@@ -33,7 +34,7 @@ class SplashScreen extends ConsumerWidget {
     });
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -64,21 +65,21 @@ class SplashScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               AppStrings.appName,
               style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
+                color: context.textPrimaryColor,
                 letterSpacing: 1.2,
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               AppStrings.tagline,
               style: TextStyle(
                 fontSize: 14,
-                color: AppColors.textSecondary,
+                color: context.textSecondaryColor,
                 fontWeight: FontWeight.w400,
               ),
             ),

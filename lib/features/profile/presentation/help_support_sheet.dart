@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 class HelpSupportSheet extends StatelessWidget {
   const HelpSupportSheet({super.key});
@@ -32,9 +33,9 @@ class HelpSupportSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: context.surfaceColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: DraggableScrollableSheet(
         initialChildSize: 0.75,
@@ -50,11 +51,11 @@ class HelpSupportSheet extends StatelessWidget {
               child: Container(
                 width: 40,
                 height: 4,
-                decoration: BoxDecoration(color: AppColors.darkBorder, borderRadius: BorderRadius.circular(2)),
+                decoration: BoxDecoration(color: context.borderColor, borderRadius: BorderRadius.circular(2)),
               ),
             ),
             const SizedBox(height: AppSizes.md),
-            const Text('Help & Support', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+            Text('Help & Support', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
             const SizedBox(height: AppSizes.sm),
 
             // Contact Cards
@@ -69,7 +70,7 @@ class HelpSupportSheet extends StatelessWidget {
             ),
             const SizedBox(height: AppSizes.lg),
 
-            const Text('Frequently Asked Questions', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+            Text('Frequently Asked Questions', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
             const SizedBox(height: AppSizes.sm),
 
             ..._faqs.map((faq) => _FaqTile(question: faq['q'] as String, answer: faq['a'] as String)),
@@ -105,7 +106,7 @@ class _ContactCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(label, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w700)),
             const SizedBox(height: 2),
-            Text(sub, style: const TextStyle(color: AppColors.textMuted, fontSize: 9), textAlign: TextAlign.center, maxLines: 2),
+            Text(sub, style: TextStyle(color: context.textMutedColor, fontSize: 9), textAlign: TextAlign.center, maxLines: 2),
           ],
         ),
       ),
@@ -131,19 +132,19 @@ class _FaqTileState extends State<_FaqTile> {
       duration: const Duration(milliseconds: 250),
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: AppColors.darkBg,
+        color: context.bgColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: _expanded ? AppColors.primary.withValues(alpha: 0.4) : AppColors.darkBorder),
+        border: Border.all(color: _expanded ? AppColors.primary.withValues(alpha: 0.4) : context.borderColor),
       ),
       child: Material(
         color: Colors.transparent,
         child: Column(
           children: [
             ListTile(
-              title: Text(widget.question, style: const TextStyle(color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.w500)),
+              title: Text(widget.question, style: TextStyle(color: context.textPrimaryColor, fontSize: 13, fontWeight: FontWeight.w500)),
             trailing: Icon(
               _expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: AppColors.textMuted,
+              color: context.textMutedColor,
               size: 20,
             ),
             onTap: () => setState(() => _expanded = !_expanded),
@@ -153,7 +154,7 @@ class _FaqTileState extends State<_FaqTile> {
           if (_expanded)
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-              child: Text(widget.answer, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12, height: 1.6)),
+              child: Text(widget.answer, style: TextStyle(color: context.textSecondaryColor, fontSize: 12, height: 1.6)),
             ),
           ],
         ),

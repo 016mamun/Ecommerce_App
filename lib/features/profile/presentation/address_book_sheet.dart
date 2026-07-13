@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 // Provider for addresses
 final addressProvider = StateNotifierProvider<AddressNotifier, List<AddressModel>>((ref) {
@@ -86,9 +87,9 @@ class AddressBookSheet extends ConsumerWidget {
     final addresses = ref.watch(addressProvider);
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: context.surfaceColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.all(AppSizes.md),
       child: Column(
@@ -99,7 +100,7 @@ class AddressBookSheet extends ConsumerWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.darkBorder,
+              color: context.borderColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -108,12 +109,12 @@ class AddressBookSheet extends ConsumerWidget {
           // Header
           Row(
             children: [
-              const Text(
+              Text(
                 'Address Book',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimary,
+                  color: context.textPrimaryColor,
                 ),
               ),
               const Spacer(),
@@ -156,26 +157,26 @@ class AddressBookSheet extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.darkSurface,
-        title: const Text('Add New Address', style: TextStyle(color: AppColors.textPrimary, fontSize: 16)),
+        backgroundColor: context.surfaceColor,
+        title: Text('Add New Address', style: TextStyle(color: context.textPrimaryColor, fontSize: 16)),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildField('Label (Home/Office)', labelCtrl),
+              _buildField(context, 'Label (Home/Office)', labelCtrl),
               const SizedBox(height: 12),
-              _buildField('Full Name', nameCtrl),
+              _buildField(context, 'Full Name', nameCtrl),
               const SizedBox(height: 12),
-              _buildField('Phone', phoneCtrl),
+              _buildField(context, 'Phone', phoneCtrl),
               const SizedBox(height: 12),
-              _buildField('Full Address', addressCtrl, maxLines: 2),
+              _buildField(context, 'Full Address', addressCtrl, maxLines: 2),
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('Cancel', style: TextStyle(color: context.textSecondaryColor)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
@@ -198,23 +199,23 @@ class AddressBookSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildField(String hint, TextEditingController ctrl, {int maxLines = 1}) {
+  Widget _buildField(BuildContext context, String hint, TextEditingController ctrl, {int maxLines = 1}) {
     return TextField(
       controller: ctrl,
       maxLines: maxLines,
-      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+      style: TextStyle(color: context.textPrimaryColor, fontSize: 14),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+        hintStyle: TextStyle(color: context.textMutedColor, fontSize: 13),
         filled: true,
-        fillColor: AppColors.darkBg,
+        fillColor: context.bgColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.darkBorder),
+          borderSide: BorderSide(color: context.borderColor),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: AppColors.darkBorder),
+          borderSide: BorderSide(color: context.borderColor),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -242,10 +243,10 @@ class _AddressCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.darkBg,
+        color: context.bgColor,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: address.isDefault ? AppColors.primary : AppColors.darkBorder,
+          color: address.isDefault ? AppColors.primary : context.borderColor,
           width: address.isDefault ? 1.5 : 1,
         ),
       ),
@@ -259,13 +260,13 @@ class _AddressCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: address.isDefault
                       ? AppColors.primary.withValues(alpha: 0.15)
-                      : AppColors.darkSurface,
+                      : context.surfaceColor,
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   address.label,
                   style: TextStyle(
-                    color: address.isDefault ? AppColors.primary : AppColors.textSecondary,
+                    color: address.isDefault ? AppColors.primary : context.textSecondaryColor,
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                   ),
@@ -295,17 +296,17 @@ class _AddressCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             address.name,
-            style: const TextStyle(color: AppColors.textPrimary, fontSize: 14, fontWeight: FontWeight.w600),
+            style: TextStyle(color: context.textPrimaryColor, fontSize: 14, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 2),
           Text(
             address.phone,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+            style: TextStyle(color: context.textSecondaryColor, fontSize: 12),
           ),
           const SizedBox(height: 2),
           Text(
             address.address,
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+            style: TextStyle(color: context.textSecondaryColor, fontSize: 12),
           ),
           if (!address.isDefault) ...[
             const SizedBox(height: 10),

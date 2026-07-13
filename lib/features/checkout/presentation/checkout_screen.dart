@@ -9,6 +9,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 
 class CheckoutScreen extends ConsumerWidget {
@@ -23,7 +24,7 @@ class CheckoutScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
         title: const Text('Checkout', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
         leading: GestureDetector(
@@ -79,9 +80,9 @@ class _Stepper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppSizes.md, horizontal: AppSizes.lg),
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        border: Border(bottom: BorderSide(color: AppColors.darkBorder)),
+      decoration: BoxDecoration(
+        color: context.surfaceColor,
+        border: Border(bottom: BorderSide(color: context.borderColor)),
       ),
       child: Row(
         children: [
@@ -117,14 +118,14 @@ class _StepIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isCompleted || isActive ? AppColors.primary : AppColors.darkBorder;
+    final color = isCompleted || isActive ? AppColors.primary : context.borderColor;
     return Column(
       children: [
         Container(
           width: 24,
           height: 24,
           decoration: BoxDecoration(
-            color: isCompleted ? AppColors.primary : (isActive ? Colors.transparent : AppColors.darkSurface),
+            color: isCompleted ? AppColors.primary : (isActive ? Colors.transparent : context.surfaceColor),
             shape: BoxShape.circle,
             border: Border.all(color: color, width: 2),
           ),
@@ -138,7 +139,7 @@ class _StepIndicator extends StatelessWidget {
           style: TextStyle(
             fontSize: 10,
             fontWeight: isActive || isCompleted ? FontWeight.w600 : FontWeight.w400,
-            color: isActive || isCompleted ? AppColors.textPrimary : AppColors.textMuted,
+            color: isActive || isCompleted ? context.textPrimaryColor : context.textMutedColor,
           ),
         ),
       ],
@@ -156,7 +157,7 @@ class _StepDivider extends StatelessWidget {
       child: Container(
         height: 2,
         margin: const EdgeInsets.symmetric(horizontal: 8).copyWith(bottom: 16),
-        color: isActive ? AppColors.primary : AppColors.darkBorder,
+        color: isActive ? AppColors.primary : context.borderColor,
       ),
     );
   }
@@ -174,7 +175,7 @@ class _AddressSelectionStep extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.all(AppSizes.md),
       children: [
-        const Text('Select Delivery Address', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+        Text('Select Delivery Address', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
         const SizedBox(height: AppSizes.md),
         ...state.savedAddresses.map((address) {
           final isSelected = state.selectedAddress?.id == address.id;
@@ -184,14 +185,14 @@ class _AddressSelectionStep extends ConsumerWidget {
               margin: const EdgeInsets.only(bottom: AppSizes.sm),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.darkCard,
+                color: context.cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: isSelected ? AppColors.primary : AppColors.darkBorder, width: isSelected ? 2 : 1),
+                border: Border.all(color: isSelected ? AppColors.primary : context.borderColor, width: isSelected ? 2 : 1),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked, color: isSelected ? AppColors.primary : AppColors.textMuted),
+                  Icon(isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked, color: isSelected ? AppColors.primary : context.textMutedColor),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -211,9 +212,9 @@ class _AddressSelectionStep extends ConsumerWidget {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        Text(address.phone, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                        Text(address.phone, style: TextStyle(color: context.textSecondaryColor, fontSize: 12)),
                         const SizedBox(height: 4),
-                        Text('${address.address}, ${address.city}', style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                        Text('${address.address}, ${address.city}', style: TextStyle(color: context.textSecondaryColor, fontSize: 12)),
                       ],
                     ),
                   ),
@@ -245,7 +246,7 @@ class _PaymentSelectionStep extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.all(AppSizes.md),
       children: [
-        const Text('Select Payment Method', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+        Text('Select Payment Method', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
         const SizedBox(height: AppSizes.md),
         _PaymentOption(
           title: AppStrings.cashOnDelivery,
@@ -307,19 +308,19 @@ class _PaymentOption extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: AppSizes.sm),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isSelected ? AppColors.primary : AppColors.darkBorder, width: isSelected ? 2 : 1),
+          border: Border.all(color: isSelected ? AppColors.primary : context.borderColor, width: isSelected ? 2 : 1),
         ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: AppColors.darkSurface,
+                color: context.surfaceColor,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(icon, color: iconColor ?? AppColors.textPrimary),
+              child: Icon(icon, color: iconColor ?? context.textPrimaryColor),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -327,11 +328,11 @@ class _PaymentOption extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                  Text(subtitle, style: const TextStyle(color: AppColors.textMuted, fontSize: 12)),
+                  Text(subtitle, style: TextStyle(color: context.textMutedColor, fontSize: 12)),
                 ],
               ),
             ),
-            Icon(isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked, color: isSelected ? AppColors.primary : AppColors.textMuted),
+            Icon(isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked, color: isSelected ? AppColors.primary : context.textMutedColor),
           ],
         ),
       ),
@@ -354,16 +355,16 @@ class _OrderSummaryStep extends ConsumerWidget {
     return ListView(
       padding: const EdgeInsets.all(AppSizes.md),
       children: [
-        const Text('Review Order', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+        Text('Review Order', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
         const SizedBox(height: AppSizes.md),
 
         // Delivery Address
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: AppColors.darkCard,
+            color: context.cardColor,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.darkBorder),
+            border: Border.all(color: context.borderColor),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,8 +380,8 @@ class _OrderSummaryStep extends ConsumerWidget {
               if (state.selectedAddress != null) ...[
                 Text(state.selectedAddress!.name, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 13)),
                 const SizedBox(height: 4),
-                Text('${state.selectedAddress!.address}, ${state.selectedAddress!.city}', style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
-                Text(state.selectedAddress!.phone, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                Text('${state.selectedAddress!.address}, ${state.selectedAddress!.city}', style: TextStyle(color: context.textSecondaryColor, fontSize: 12)),
+                Text(state.selectedAddress!.phone, style: TextStyle(color: context.textSecondaryColor, fontSize: 12)),
               ],
             ],
           ),
@@ -404,7 +405,7 @@ class _OrderSummaryStep extends ConsumerWidget {
               ),
             )),
         const SizedBox(height: AppSizes.lg),
-        const Divider(color: AppColors.darkBorder),
+        Divider(color: context.borderColor),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -445,9 +446,9 @@ class _BottomBar extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(AppSizes.md),
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        border: Border(top: BorderSide(color: AppColors.darkBorder)),
+      decoration: BoxDecoration(
+        color: context.surfaceColor,
+        border: Border(top: BorderSide(color: context.borderColor)),
       ),
       child: SafeArea(
         child: GradientButton(
@@ -467,7 +468,7 @@ class _OrderSuccessView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(AppSizes.xl),
@@ -484,12 +485,12 @@ class _OrderSuccessView extends ConsumerWidget {
                 child: const Icon(Icons.check_circle, color: AppColors.success, size: 60),
               ),
               const SizedBox(height: AppSizes.lg),
-              const Text('Order Placed!', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
+              Text('Order Placed!', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: context.textPrimaryColor)),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Your order has been successfully placed. You will receive a confirmation email shortly.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                style: TextStyle(color: context.textSecondaryColor, fontSize: 14),
               ),
               const SizedBox(height: AppSizes.xxl),
               GradientButton(

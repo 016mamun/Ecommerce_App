@@ -7,6 +7,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 
@@ -53,7 +54,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.lg),
@@ -69,26 +70,26 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppColors.darkSurface,
+                      color: context.surfaceColor,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.darkBorder),
+                      border: Border.all(color: context.borderColor),
                     ),
-                    child: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary, size: 18),
+                    child: Icon(Icons.arrow_back_ios_new, color: context.textPrimaryColor, size: 18),
                   ),
                 ),
                 const SizedBox(height: AppSizes.lg),
-                const Text(
-                  'Create Account 🎉',
+                Text(
+                  'Create Account ✨',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+                    color: context.textPrimaryColor,
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
-                  'Join ShopNest for the best deals',
-                  style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                Text(
+                  'Sign up to get started',
+                  style: TextStyle(fontSize: 14, color: context.textSecondaryColor),
                 ),
                 const SizedBox(height: AppSizes.xl),
 
@@ -149,9 +150,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       AppStrings.alreadyHaveAccount,
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      style: TextStyle(color: context.textSecondaryColor, fontSize: 14),
                     ),
                     GestureDetector(
                       onTap: () => context.go(AppRoutes.login),

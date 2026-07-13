@@ -13,6 +13,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/product_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 
@@ -25,7 +26,7 @@ class HomeScreen extends ConsumerWidget {
     final cartCount = ref.watch(cartCountProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -34,7 +35,7 @@ class HomeScreen extends ConsumerWidget {
             floating: true,
             snap: true,
             pinned: false,
-            backgroundColor: AppColors.darkBg,
+            backgroundColor: context.bgColor,
             elevation: 0,
             toolbarHeight: 70,
             titleSpacing: 0,
@@ -47,14 +48,14 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       Text(
                         AppStrings.goodMorning,
-                        style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
+                        style: TextStyle(fontSize: 13, color: context.textSecondaryColor),
                       ),
                       Text(
                         user?['name'] ?? 'Guest',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimaryColor,
                         ),
                       ),
                     ],
@@ -67,11 +68,11 @@ class HomeScreen extends ConsumerWidget {
                       width: 42,
                       height: 42,
                       decoration: BoxDecoration(
-                        color: AppColors.darkSurface,
+                        color: context.surfaceColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.darkBorder),
+                        border: Border.all(color: context.borderColor),
                       ),
-                      child: const Icon(Iconsax.notification, color: AppColors.textPrimary, size: 20),
+                      child: Icon(Iconsax.notification, color: context.textPrimaryColor, size: 20),
                     ),
                   ),
                   const SizedBox(width: AppSizes.sm),
@@ -84,11 +85,11 @@ class HomeScreen extends ConsumerWidget {
                           width: 42,
                           height: 42,
                           decoration: BoxDecoration(
-                            color: AppColors.darkSurface,
+                            color: context.surfaceColor,
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.darkBorder),
+                            border: Border.all(color: context.borderColor),
                           ),
-                          child: const Icon(Iconsax.shopping_cart, color: AppColors.textPrimary, size: 20),
+                          child: Icon(Iconsax.shopping_cart, color: context.textPrimaryColor, size: 20),
                         ),
                         if (cartCount > 0)
                           Positioned(
@@ -100,7 +101,7 @@ class HomeScreen extends ConsumerWidget {
                               decoration: BoxDecoration(
                                 color: AppColors.secondary,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.darkBg, width: 2),
+                                border: Border.all(color: context.bgColor, width: 2),
                               ),
                               child: Center(
                                 child: Text(
@@ -131,19 +132,19 @@ class HomeScreen extends ConsumerWidget {
                 child: Container(
                   height: 50,
                   decoration: BoxDecoration(
-                    color: AppColors.darkSurface,
+                    color: context.surfaceColor,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.darkBorder),
+                    border: Border.all(color: context.borderColor),
                   ),
                   child: Row(
                     children: [
                       const SizedBox(width: 14),
-                      const Icon(Iconsax.search_normal, color: AppColors.textMuted, size: 20),
+                      Icon(Iconsax.search_normal, color: context.textMutedColor, size: 20),
                       const SizedBox(width: 10),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           AppStrings.searchHint,
-                          style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                          style: TextStyle(color: context.textMutedColor, fontSize: 14),
                         ),
                       ),
                       Container(
@@ -174,9 +175,9 @@ class HomeScreen extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     AppStrings.categories,
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: context.textPrimaryColor),
                   ),
                   GestureDetector(
                     onTap: () => context.go(AppRoutes.explore),
@@ -198,9 +199,9 @@ class HomeScreen extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     AppStrings.trending,
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: context.textPrimaryColor),
                   ),
                   GestureDetector(
                     onTap: () => context.go(AppRoutes.explore),
@@ -225,9 +226,9 @@ class HomeScreen extends ConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     AppStrings.newArrivals,
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700, color: context.textPrimaryColor),
                   ),
                   GestureDetector(
                     onTap: () => context.go(AppRoutes.explore),
@@ -292,7 +293,7 @@ class _BannerCarouselState extends ConsumerState<_BannerCarousel> {
             count: banners.length,
             effect: ExpandingDotsEffect(
               activeDotColor: AppColors.primary,
-              dotColor: AppColors.darkBorder,
+              dotColor: context.borderColor,
               dotHeight: 6,
               dotWidth: 6,
               expansionFactor: 3,
@@ -424,9 +425,9 @@ class _CategoriesRow extends ConsumerWidget {
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: AppColors.darkCard,
+                        color: context.cardColor,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.darkBorder),
+                        border: Border.all(color: context.borderColor),
                       ),
                       child: Center(
                         child: Text(cat.emoji, style: const TextStyle(fontSize: 26)),
@@ -438,7 +439,7 @@ class _CategoriesRow extends ConsumerWidget {
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                      style: TextStyle(fontSize: 10, color: context.textSecondaryColor),
                     ),
                   ],
                 ),

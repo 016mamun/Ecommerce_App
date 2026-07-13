@@ -9,6 +9,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 class OrderHistoryScreen extends ConsumerWidget {
   const OrderHistoryScreen({super.key});
@@ -18,7 +19,7 @@ class OrderHistoryScreen extends ConsumerWidget {
     final ordersAsync = ref.watch(ordersProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
         title: const Text(AppStrings.myOrders, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
         leading: GestureDetector(
@@ -37,7 +38,7 @@ class OrderHistoryScreen extends ConsumerWidget {
         error: (_, __) => const Center(child: Text('Failed to load orders')),
         data: (orders) {
           if (orders.isEmpty) {
-            return const Center(child: Text('No orders found', style: TextStyle(color: AppColors.textSecondary)));
+            return Center(child: Text('No orders found', style: TextStyle(color: context.textSecondaryColor)));
           }
           return ListView.builder(
             padding: const EdgeInsets.all(AppSizes.md),
@@ -82,9 +83,9 @@ class _OrderCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: AppSizes.md),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: context.borderColor),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,26 +110,26 @@ class _OrderCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                const Icon(Iconsax.calendar_1, color: AppColors.textMuted, size: 16),
+                Icon(Iconsax.calendar_1, color: context.textMutedColor, size: 16),
                 const SizedBox(width: 8),
-                Text(dateFormat.format(order.date), style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                Text(dateFormat.format(order.date), style: TextStyle(color: context.textSecondaryColor, fontSize: 12)),
               ],
             ),
             const SizedBox(height: 6),
             Row(
               children: [
-                const Icon(Iconsax.box, color: AppColors.textMuted, size: 16),
+                Icon(Iconsax.box, color: context.textMutedColor, size: 16),
                 const SizedBox(width: 8),
-                Text('${order.itemCount} items', style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                Text('${order.itemCount} items', style: TextStyle(color: context.textSecondaryColor, fontSize: 12)),
               ],
             ),
             const SizedBox(height: 16),
-            const Divider(color: AppColors.darkBorder, height: 1),
+            Divider(color: context.borderColor, height: 1),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Total Amount', style: TextStyle(color: AppColors.textSecondary, fontSize: 13)),
+                Text('Total Amount', style: TextStyle(color: context.textSecondaryColor, fontSize: 13)),
                 Text(currency.format(order.totalAmount), style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: AppColors.primary)),
               ],
             ),

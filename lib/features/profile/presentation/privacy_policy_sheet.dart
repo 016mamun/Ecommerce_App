@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 class PrivacyPolicySheet extends StatelessWidget {
   const PrivacyPolicySheet({super.key});
@@ -8,9 +9,9 @@ class PrivacyPolicySheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: context.surfaceColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: DraggableScrollableSheet(
         initialChildSize: 0.8,
@@ -26,13 +27,13 @@ class PrivacyPolicySheet extends StatelessWidget {
               child: Container(
                 width: 40,
                 height: 4,
-                decoration: BoxDecoration(color: AppColors.darkBorder, borderRadius: BorderRadius.circular(2)),
+                decoration: BoxDecoration(color: context.borderColor, borderRadius: BorderRadius.circular(2)),
               ),
             ),
             const SizedBox(height: AppSizes.md),
-            const Text('Privacy Policy', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
+            Text('Privacy Policy', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: context.textPrimaryColor)),
             const SizedBox(height: 4),
-            const Text('Last updated: July 2025', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+            Text('Last updated: July 2025', style: TextStyle(color: context.textMutedColor, fontSize: 12)),
             const SizedBox(height: AppSizes.lg),
 
             _PolicySection(
@@ -94,8 +95,8 @@ class _PolicySection extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             content,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: context.textSecondaryColor,
               fontSize: 13,
               height: 1.7,
             ),

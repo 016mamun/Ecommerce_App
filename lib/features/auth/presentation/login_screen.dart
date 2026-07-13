@@ -8,6 +8,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 
@@ -50,7 +51,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.lg),
@@ -82,18 +83,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: const Icon(Icons.shopping_bag_rounded, color: Colors.white, size: 32),
                 ),
                 const SizedBox(height: AppSizes.lg),
-                const Text(
+                Text(
                   'Welcome back! 👋',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
+                    color: context.textPrimaryColor,
                   ),
                 ),
                 const SizedBox(height: 6),
-                const Text(
+                Text(
                   'Login to continue shopping',
-                  style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                  style: TextStyle(fontSize: 14, color: context.textSecondaryColor),
                 ),
                 const SizedBox(height: AppSizes.xxl),
 
@@ -151,15 +152,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 // Divider
                 Row(
                   children: [
-                    const Expanded(child: Divider(color: AppColors.darkBorder)),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                    Expanded(child: Divider(color: context.borderColor)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
                         AppStrings.orContinueWith,
-                        style: TextStyle(color: AppColors.textMuted, fontSize: 12),
+                        style: TextStyle(color: context.textMutedColor, fontSize: 12),
                       ),
                     ),
-                    const Expanded(child: Divider(color: AppColors.darkBorder)),
+                    Expanded(child: Divider(color: context.borderColor)),
                   ],
                 ),
                 const SizedBox(height: AppSizes.md),
@@ -194,9 +195,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: const Text(
+                    child: Text(
                       AppStrings.continueAsGuest,
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      style: TextStyle(color: context.textSecondaryColor, fontSize: 14),
                     ),
                   ),
                 ),
@@ -205,9 +206,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       AppStrings.dontHaveAccount,
-                      style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                      style: TextStyle(color: context.textSecondaryColor, fontSize: 14),
                     ),
                     GestureDetector(
                       onTap: () => context.go(AppRoutes.signup),
@@ -249,9 +250,9 @@ class _SocialButton extends StatelessWidget {
       child: Container(
         height: 50,
         decoration: BoxDecoration(
-          color: AppColors.darkSurface,
+          color: context.surfaceColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: context.borderColor),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -264,8 +265,8 @@ class _SocialButton extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               label,
-              style: const TextStyle(
-                color: AppColors.textPrimary,
+              style: TextStyle(
+                color: context.textPrimaryColor,
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
               ),

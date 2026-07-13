@@ -10,7 +10,9 @@ import '../../wishlist/domain/providers/wishlist_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 
@@ -49,7 +51,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
     final currency = NumberFormat.currency(locale: 'en_US', symbol: '৳');
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       body: productAsync.when(
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.primary),
@@ -91,7 +93,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                   SliverAppBar(
                     expandedHeight: 380,
                     pinned: true,
-                    backgroundColor: AppColors.darkBg,
+                    backgroundColor: context.bgColor,
                     leading: GestureDetector(
                       onTap: () {
                         if (context.canPop()) {
@@ -103,10 +105,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                       child: Container(
                         margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: AppColors.darkBg.withOpacity(0.7),
+                          color: context.bgColor.withOpacity(0.7),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+                        child: Icon(Icons.arrow_back_ios_new, color: context.iconBgColor, size: 18),
                       ),
                     ),
                     actions: [
@@ -117,12 +119,12 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: AppColors.darkBg.withOpacity(0.7),
+                            color: context.bgColor.withOpacity(0.7),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             isWishlisted ? Iconsax.heart5 : Iconsax.heart,
-                            color: isWishlisted ? AppColors.secondary : Colors.white,
+                            color: isWishlisted ? AppColors.secondary : context.iconBgColor,
                             size: 20,
                           ),
                         ),
@@ -178,9 +180,9 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
 
                   SliverToBoxAdapter(
                     child: Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.darkBg,
-                        borderRadius: BorderRadius.only(
+                      decoration: BoxDecoration(
+                        color: context.bgColor,
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(24),
                           topRight: Radius.circular(24),
                         ),
@@ -242,10 +244,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                           // Title
                           Text(
                             product.title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
+                              color: context.textPrimaryColor,
                               height: 1.3,
                             ),
                           ),
@@ -263,15 +265,15 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                               const SizedBox(width: 4),
                               Text(
                                 product.rating.toStringAsFixed(1),
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: AppColors.textPrimary,
+                                  color: context.textPrimaryColor,
                                 ),
                               ),
                               Text(
                                 ' (${product.reviewCount} reviews)',
-                                style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
+                                style: TextStyle(fontSize: 12, color: context.textMutedColor),
                               ),
                             ],
                           ),
@@ -335,10 +337,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                                       gradient: isSelected
                                           ? const LinearGradient(colors: [AppColors.primary, AppColors.primaryLight])
                                           : null,
-                                      color: isSelected ? null : AppColors.darkCard,
+                                      color: isSelected ? null : context.cardColor,
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
-                                        color: isSelected ? Colors.transparent : AppColors.darkBorder,
+                                        color: isSelected ? Colors.transparent : context.borderColor,
                                       ),
                                     ),
                                     child: Center(
@@ -377,10 +379,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                                       gradient: isSelected
                                           ? const LinearGradient(colors: [AppColors.primary, AppColors.primaryLight])
                                           : null,
-                                      color: isSelected ? null : AppColors.darkCard,
+                                      color: isSelected ? null : context.cardColor,
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                        color: isSelected ? Colors.transparent : AppColors.darkBorder,
+                                        color: isSelected ? Colors.transparent : context.borderColor,
                                       ),
                                     ),
                                     child: Text(
@@ -402,9 +404,9 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                           TabBar(
                             controller: _tabController,
                             labelColor: AppColors.primary,
-                            unselectedLabelColor: AppColors.textMuted,
+                            unselectedLabelColor: context.textMutedColor,
                             indicatorColor: AppColors.primary,
-                            dividerColor: AppColors.darkBorder,
+                            dividerColor: context.borderColor,
                             labelStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
                             tabs: const [
                               Tab(text: 'Description'),
@@ -429,13 +431,13 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                                   ),
                                 ),
                                 // Reviews placeholder
-                                const Padding(
-                                  padding: EdgeInsets.only(top: AppSizes.md),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: AppSizes.md),
                                   child: Column(
                                     children: [
-                                      _ReviewItem(name: 'Sakib A.', rating: 5, comment: 'Excellent product! Exactly as described. Super fast delivery.'),
-                                      Divider(color: AppColors.darkBorder),
-                                      _ReviewItem(name: 'Riya M.', rating: 4, comment: 'Good quality. Slightly smaller than expected but overall satisfied.'),
+                                      const _ReviewItem(name: 'Sakib A.', rating: 5, comment: 'Excellent product! Exactly as described. Super fast delivery.'),
+                                      Divider(color: context.borderColor),
+                                      const _ReviewItem(name: 'Riya M.', rating: 4, comment: 'Good quality. Slightly smaller than expected but overall satisfied.'),
                                     ],
                                   ),
                                 ),
@@ -458,8 +460,8 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(AppSizes.md, AppSizes.sm, AppSizes.md, AppSizes.lg),
                   decoration: BoxDecoration(
-                    color: AppColors.darkBg,
-                    border: const Border(top: BorderSide(color: AppColors.darkBorder)),
+                    color: context.bgColor,
+                    border: Border(top: BorderSide(color: context.borderColor)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
@@ -506,7 +508,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen>
                           height: 52,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           decoration: BoxDecoration(
-                            color: AppColors.darkSurface,
+                            color: context.surfaceColor,
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(color: AppColors.primary),
                           ),
@@ -560,7 +562,7 @@ class _ReviewItem extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.textPrimary)),
+                    Text(name, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: context.textPrimaryColor)),
                     const Spacer(),
                     Row(
                       children: List.generate(
@@ -575,7 +577,7 @@ class _ReviewItem extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(comment, style: const TextStyle(fontSize: 11, color: AppColors.textSecondary, height: 1.4)),
+                Text(comment, style: TextStyle(fontSize: 11, color: context.textSecondaryColor, height: 1.4)),
               ],
             ),
           ),

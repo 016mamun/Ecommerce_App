@@ -78,6 +78,7 @@ final productDetailProvider = FutureProvider.family<ProductModel?, String>((ref,
 
 final filteredProductsProvider = FutureProvider<List<ProductModel>>((ref) async {
   final filter = ref.watch(productFilterProvider);
+  final query = ref.watch(searchQueryProvider);
   final repo = ref.watch(productRepositoryProvider);
 
   List<ProductModel> products;
@@ -85,6 +86,14 @@ final filteredProductsProvider = FutureProvider<List<ProductModel>>((ref) async 
     products = await repo.getProductsByCategory(filter.category);
   } else {
     products = await repo.getAllProducts();
+  }
+
+  // Apply search query
+  if (query.isNotEmpty) {
+    products = products.where((p) => 
+      p.title.toLowerCase().contains(query.toLowerCase()) || 
+      p.brand.toLowerCase().contains(query.toLowerCase())
+    ).toList();
   }
 
   // Apply filters

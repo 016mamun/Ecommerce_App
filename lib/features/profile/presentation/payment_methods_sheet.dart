@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 class PaymentMethodsSheet extends StatefulWidget {
   const PaymentMethodsSheet({super.key});
@@ -47,9 +48,9 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.darkSurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: context.surfaceColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.all(AppSizes.md),
       child: Column(
@@ -60,7 +61,7 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: AppColors.darkBorder,
+              color: context.borderColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -69,9 +70,9 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
           // Header
           Row(
             children: [
-              const Text(
+              Text(
                 'Payment Methods',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: context.textPrimaryColor),
               ),
               const Spacer(),
               TextButton.icon(
@@ -96,10 +97,10 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
                 child: Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: AppColors.darkBg,
+                    color: context.bgColor,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: isSelected ? AppColors.primary : AppColors.darkBorder,
+                      color: isSelected ? AppColors.primary : context.borderColor,
                       width: isSelected ? 1.5 : 1,
                     ),
                   ),
@@ -132,8 +133,8 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
                           children: [
                             Text(
                               method['name'] as String,
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
+                              style: TextStyle(
+                                color: context.textPrimaryColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -141,14 +142,14 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
                             const SizedBox(height: 2),
                             Text(
                               method['sub'] as String,
-                              style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                              style: TextStyle(color: context.textSecondaryColor, fontSize: 12),
                             ),
                           ],
                         ),
                       ),
                       Icon(
                         isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                        color: isSelected ? AppColors.primary : AppColors.textMuted,
+                        color: isSelected ? AppColors.primary : context.textMutedColor,
                         size: 20,
                       ),
                     ],
@@ -181,8 +182,8 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.darkSurface,
-        title: const Text('Add New Card', style: TextStyle(color: AppColors.textPrimary, fontSize: 16)),
+        backgroundColor: context.surfaceColor,
+        title: Text('Add New Card', style: TextStyle(color: context.textPrimaryColor, fontSize: 16)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -202,7 +203,7 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('Cancel', style: TextStyle(color: context.textSecondaryColor)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
@@ -216,14 +217,14 @@ class _PaymentMethodsSheetState extends State<PaymentMethodsSheet> {
 
   Widget _buildField(String hint) {
     return TextField(
-      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+      style: TextStyle(color: context.textPrimaryColor, fontSize: 14),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+        hintStyle: TextStyle(color: context.textMutedColor, fontSize: 13),
         filled: true,
-        fillColor: AppColors.darkBg,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.darkBorder)),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.darkBorder)),
+        fillColor: context.bgColor,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: context.borderColor)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: context.borderColor)),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.primary)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       ),

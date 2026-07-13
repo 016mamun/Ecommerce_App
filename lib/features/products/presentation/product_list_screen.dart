@@ -6,6 +6,7 @@ import '../domain/providers/product_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/product_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 
@@ -51,9 +52,9 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
     final productsAsync = ref.watch(filteredProductsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg,
+        backgroundColor: context.bgColor,
         leading: GestureDetector(
           onTap: () => context.go('/home'),
           child: const Icon(Icons.arrow_back_ios_new, size: 18),
@@ -92,12 +93,12 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
             padding: const EdgeInsets.fromLTRB(AppSizes.md, 0, AppSizes.md, AppSizes.md),
             child: TextField(
               controller: _searchCtrl,
-              style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+              style: TextStyle(color: context.textPrimaryColor, fontSize: 14),
               onChanged: (v) => ref.read(searchQueryProvider.notifier).state = v,
               decoration: InputDecoration(
                 hintText: AppStrings.searchHint,
-                hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
-                prefixIcon: const Icon(Iconsax.search_normal, color: AppColors.textMuted, size: 20),
+                hintStyle: TextStyle(color: context.textMutedColor, fontSize: 14),
+                prefixIcon: Icon(Iconsax.search_normal, color: context.textMutedColor, size: 20),
                 suffixIcon: _searchCtrl.text.isNotEmpty
                     ? GestureDetector(
                         onTap: () {
@@ -105,7 +106,7 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
                           ref.read(searchQueryProvider.notifier).state = '';
                           setState(() {});
                         },
-                        child: const Icon(Icons.close, color: AppColors.textMuted, size: 18),
+                        child: Icon(Icons.close, color: context.textMutedColor, size: 18),
                       )
                     : null,
               ),
@@ -207,10 +208,10 @@ class _SortChip extends ConsumerWidget {
           gradient: isSelected
               ? const LinearGradient(colors: [AppColors.primary, AppColors.primaryLight])
               : null,
-          color: isSelected ? null : AppColors.darkSurface,
+          color: isSelected ? null : context.surfaceColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? Colors.transparent : AppColors.darkBorder,
+            color: isSelected ? Colors.transparent : context.borderColor,
           ),
         ),
         child: Text(
@@ -249,9 +250,9 @@ class _FilterBottomSheetState extends ConsumerState<_FilterBottomSheet> {
       minChildSize: 0.5,
       expand: false,
       builder: (_, controller) => Container(
-        decoration: const BoxDecoration(
-          color: AppColors.darkSurface,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: context.surfaceColor,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: ListView(
           controller: controller,
@@ -263,17 +264,17 @@ class _FilterBottomSheetState extends ConsumerState<_FilterBottomSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.darkBorder,
+                  color: context.borderColor,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
             const SizedBox(height: AppSizes.md),
-            const Text('Filter & Sort', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+            Text('Filter & Sort', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
             const SizedBox(height: AppSizes.lg),
 
             // Category
-            const Text('Category', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textSecondary)),
+            Text('Category', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: context.textSecondaryColor)),
             const SizedBox(height: AppSizes.sm),
             Wrap(
               spacing: 8,
@@ -289,9 +290,9 @@ class _FilterBottomSheetState extends ConsumerState<_FilterBottomSheet> {
                       gradient: isSelected
                           ? const LinearGradient(colors: [AppColors.primary, AppColors.primaryLight])
                           : null,
-                      color: isSelected ? null : AppColors.darkCard,
+                      color: isSelected ? null : context.cardColor,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: isSelected ? Colors.transparent : AppColors.darkBorder),
+                      border: Border.all(color: isSelected ? Colors.transparent : context.borderColor),
                     ),
                     child: Text(cat, style: TextStyle(fontSize: 12, color: isSelected ? Colors.white : AppColors.textSecondary)),
                   ),
@@ -317,7 +318,7 @@ class _FilterBottomSheetState extends ConsumerState<_FilterBottomSheet> {
               max: 150000,
               divisions: 100,
               activeColor: AppColors.primary,
-              inactiveColor: AppColors.darkBorder,
+              inactiveColor: context.borderColor,
               onChanged: (v) => setState(() => _priceRange = v),
             ),
             const SizedBox(height: AppSizes.md),
@@ -342,7 +343,7 @@ class _FilterBottomSheetState extends ConsumerState<_FilterBottomSheet> {
               max: 5,
               divisions: 10,
               activeColor: AppColors.primary,
-              inactiveColor: AppColors.darkBorder,
+              inactiveColor: context.borderColor,
               onChanged: (v) => setState(() => _minRating = v),
             ),
             const SizedBox(height: AppSizes.lg),

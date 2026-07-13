@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import '../constants/app_colors.dart';
+import '../theme/app_theme_colors.dart';
 
 class ShimmerLoader extends StatelessWidget {
   final double width;
@@ -17,13 +18,13 @@ class ShimmerLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.darkBorder,
-      highlightColor: AppColors.darkSurface,
+      baseColor: context.borderColor,
+      highlightColor: context.surfaceColor,
       child: Container(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
       ),
@@ -37,11 +38,11 @@ class ShimmerProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.darkBorder,
-      highlightColor: AppColors.darkSurface,
+      baseColor: context.borderColor,
+      highlightColor: context.surfaceColor,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -49,8 +50,8 @@ class ShimmerProductCard extends StatelessWidget {
           children: [
             Container(
               height: 150,
-              decoration: const BoxDecoration(
-                color: AppColors.darkBorder,
+              decoration: BoxDecoration(
+                color: context.borderColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
@@ -62,11 +63,11 @@ class ShimmerProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(height: 12, width: double.infinity, color: AppColors.darkBorder),
+                  Container(height: 12, width: double.infinity, color: context.borderColor),
                   const SizedBox(height: 6),
-                  Container(height: 12, width: 80, color: AppColors.darkBorder),
+                  Container(height: 12, width: 80, color: context.borderColor),
                   const SizedBox(height: 10),
-                  Container(height: 14, width: 60, color: AppColors.darkBorder),
+                  Container(height: 14, width: 60, color: context.borderColor),
                 ],
               ),
             ),
@@ -83,13 +84,13 @@ class ShimmerBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: AppColors.darkBorder,
-      highlightColor: AppColors.darkSurface,
+      baseColor: context.borderColor,
+      highlightColor: context.surfaceColor,
       child: Container(
         height: 200,
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(20),
         ),
       ),

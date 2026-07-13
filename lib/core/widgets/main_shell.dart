@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../router/app_router.dart';
+import '../theme/app_theme_colors.dart';
 
 class MainShell extends StatelessWidget {
   final Widget child;
@@ -26,9 +27,9 @@ class MainShell extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: AppColors.darkSurface,
-          border: Border(top: BorderSide(color: AppColors.darkBorder, width: 1)),
+        decoration: BoxDecoration(
+          color: context.surfaceColor,
+          border: Border(top: BorderSide(color: context.borderColor, width: 1)),
         ),
         child: SafeArea(
           child: SizedBox(
@@ -64,8 +65,8 @@ class MainShell extends StatelessWidget {
                   onTap: () => context.go(AppRoutes.wishlist),
                 ),
                 _NavItem(
-                  icon: Iconsax.user,
-                  activeIcon: Iconsax.user5,
+                  icon: Icons.person_outline,
+                  activeIcon: Icons.person,
                   label: AppStrings.profile,
                   isActive: currentIndex == 4,
                   onTap: () => context.go(AppRoutes.profile),
@@ -111,7 +112,7 @@ class _NavItem extends StatelessWidget {
                 child: Icon(
                   isActive ? activeIcon : icon,
                   key: ValueKey(isActive),
-                  color: isActive ? AppColors.primary : AppColors.textMuted,
+                  color: isActive ? AppColors.primary : context.textMutedColor,
                   size: 22,
                 ),
               ),
@@ -121,7 +122,7 @@ class _NavItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                  color: isActive ? AppColors.primary : AppColors.textMuted,
+                  color: isActive ? AppColors.primary : context.textMutedColor,
                 ),
               ),
             ],

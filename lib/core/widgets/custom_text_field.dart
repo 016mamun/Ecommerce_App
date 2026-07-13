@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
+import '../theme/app_theme_colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final String label;
@@ -49,17 +50,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onChanged: widget.onChanged,
       readOnly: widget.readOnly,
       onTap: widget.onTap,
-      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+      style: TextStyle(color: context.textPrimaryColor, fontSize: 14),
       decoration: InputDecoration(
         labelText: widget.label,
         hintText: widget.hint,
+        hintStyle: TextStyle(color: context.textMutedColor, fontSize: 14),
+        labelStyle: TextStyle(color: context.textSecondaryColor, fontSize: 14),
         prefixIcon: widget.prefixIcon,
         suffixIcon: widget.isPassword
             ? GestureDetector(
                 onTap: () => setState(() => _obscure = !_obscure),
                 child: Icon(
                   _obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                  color: AppColors.textMuted,
+                  color: context.textMutedColor,
                   size: 20,
                 ),
               )

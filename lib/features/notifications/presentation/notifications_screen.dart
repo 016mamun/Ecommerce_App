@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 
 class NotificationsScreen extends ConsumerWidget {
   const NotificationsScreen({super.key});
@@ -12,7 +13,7 @@ class NotificationsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
         title: const Text(AppStrings.notifications, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
         leading: GestureDetector(
@@ -29,7 +30,7 @@ class NotificationsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(AppSizes.md),
         children: [
-          const Text('Today', style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.textSecondary, fontSize: 13)),
+          Text('Today', style: TextStyle(fontWeight: FontWeight.w600, color: context.textSecondaryColor, fontSize: 13)),
           const SizedBox(height: 12),
           _NotificationItem(
             title: 'Order Shipped!',
@@ -48,7 +49,7 @@ class NotificationsScreen extends ConsumerWidget {
             isUnread: true,
           ),
           const SizedBox(height: AppSizes.lg),
-          const Text('Yesterday', style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.textSecondary, fontSize: 13)),
+          Text('Yesterday', style: TextStyle(fontWeight: FontWeight.w600, color: context.textSecondaryColor, fontSize: 13)),
           const SizedBox(height: 12),
           _NotificationItem(
             title: 'Welcome to ShopNest 🎉',
@@ -87,9 +88,9 @@ class _NotificationItem extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppSizes.sm),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isUnread ? AppColors.darkCard : AppColors.darkSurface,
+        color: isUnread ? context.cardColor : context.surfaceColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isUnread ? AppColors.darkBorder : Colors.transparent),
+        border: Border.all(color: isUnread ? context.borderColor : Colors.transparent),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,11 +117,11 @@ class _NotificationItem extends StatelessWidget {
                         style: TextStyle(
                           fontWeight: isUnread ? FontWeight.w700 : FontWeight.w500,
                           fontSize: 14,
-                          color: AppColors.textPrimary,
+                          color: context.textPrimaryColor,
                         ),
                       ),
                     ),
-                    Text(time, style: const TextStyle(fontSize: 11, color: AppColors.textMuted)),
+                    Text(time, style: TextStyle(fontSize: 11, color: context.textMutedColor)),
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -128,7 +129,7 @@ class _NotificationItem extends StatelessWidget {
                   message,
                   style: TextStyle(
                     fontSize: 12,
-                    color: isUnread ? AppColors.textSecondary : AppColors.textMuted,
+                    color: isUnread ? context.textSecondaryColor : context.textMutedColor,
                     height: 1.4,
                   ),
                 ),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import '../constants/app_colors.dart';
+import '../theme/app_theme_colors.dart';
 import '../../features/products/data/models/product_model.dart';
 import '../../features/wishlist/domain/providers/wishlist_provider.dart';
 import '../../features/cart/domain/providers/cart_provider.dart';
@@ -28,9 +29,9 @@ class ProductCard extends ConsumerWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: context.borderColor),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,8 +55,8 @@ class ProductCard extends ConsumerWidget {
                         borderRadius: 0,
                       ),
                       errorWidget: (_, __, ___) => Container(
-                        color: AppColors.darkSurface,
-                        child: const Icon(Iconsax.image, color: AppColors.textMuted),
+                        color: context.surfaceColor,
+                        child: Icon(Iconsax.image, color: context.textMutedColor),
                       ),
                     ),
                   ),
@@ -94,13 +95,13 @@ class ProductCard extends ConsumerWidget {
                         height: 32,
                         decoration: BoxDecoration(
                           color: isWishlisted
-                              ? AppColors.secondary.withOpacity(0.2)
-                              : AppColors.darkBg.withOpacity(0.7),
+                              ? AppColors.secondary.withValues(alpha: 0.2)
+                              : context.bgColor.withValues(alpha: 0.85),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           isWishlisted ? Iconsax.heart5 : Iconsax.heart,
-                          color: isWishlisted ? AppColors.secondary : AppColors.textSecondary,
+                          color: isWishlisted ? AppColors.secondary : context.textSecondaryColor,
                           size: 16,
                         ),
                       ),
@@ -119,27 +120,26 @@ class ProductCard extends ConsumerWidget {
                     product.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.textPrimary,
+                      color: context.textPrimaryColor,
                       height: 1.3,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  // Rating
                   Row(
                     children: [
                       const Icon(Iconsax.star5, color: Color(0xFFFFB800), size: 12),
                       const SizedBox(width: 2),
                       Text(
                         product.rating.toStringAsFixed(1),
-                        style: const TextStyle(fontSize: 10, color: AppColors.textSecondary),
+                        style: TextStyle(fontSize: 10, color: context.textSecondaryColor),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '(${product.reviewCount})',
-                        style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+                        style: TextStyle(fontSize: 10, color: context.textMutedColor),
                       ),
                     ],
                   ),
@@ -161,9 +161,9 @@ class ProductCard extends ConsumerWidget {
                           if (product.originalPrice > product.price)
                             Text(
                               currencyFormat.format(product.originalPrice),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 10,
-                                color: AppColors.textMuted,
+                                color: context.textMutedColor,
                                 decoration: TextDecoration.lineThrough,
                               ),
                             ),

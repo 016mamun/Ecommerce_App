@@ -10,6 +10,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 
@@ -52,9 +53,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     final total = ref.watch(cartTotalProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg,
+        backgroundColor: context.bgColor,
         title: Consumer(
           builder: (_, ref, __) {
             final count = ref.watch(cartCountProvider);
@@ -90,9 +91,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 Container(
                   padding: const EdgeInsets.all(AppSizes.md),
                   decoration: BoxDecoration(
-                    color: AppColors.darkSurface,
+                    color: context.surfaceColor,
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-                    border: const Border(top: BorderSide(color: AppColors.darkBorder)),
+                    border: Border(top: BorderSide(color: context.borderColor)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,11 +104,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           Expanded(
                             child: TextField(
                               controller: _promoCtrl,
-                              style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
+                              style: TextStyle(color: context.textPrimaryColor, fontSize: 13),
                               decoration: InputDecoration(
                                 hintText: 'Enter promo code (e.g. SAVE10)',
-                                hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 12),
-                                prefixIcon: const Icon(Iconsax.ticket_discount, color: AppColors.textMuted, size: 18),
+                                hintStyle: TextStyle(color: context.textMutedColor, fontSize: 12),
+                                prefixIcon: Icon(Iconsax.ticket_discount, color: context.textMutedColor, size: 18),
                                 contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                                 errorText: _promoError,
                                 isDense: true,
@@ -153,7 +154,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           valueColor: AppColors.success,
                         ),
                       ],
-                      const Divider(color: AppColors.darkBorder, height: 20),
+                      Divider(color: context.borderColor, height: 20),
                       _PriceRow(
                         label: AppStrings.total,
                         value: currency.format(total),
@@ -186,9 +187,9 @@ class _CartItemCard extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: AppSizes.sm),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.darkCard,
+        color: context.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.darkBorder),
+        border: Border.all(color: context.borderColor),
       ),
       child: Row(
         children: [
@@ -212,13 +213,13 @@ class _CartItemCard extends ConsumerWidget {
                   item.product.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: context.textPrimaryColor),
                 ),
                 if (item.selectedSize != null || item.selectedColor != null) ...[
                   const SizedBox(height: 2),
                   Text(
                     '${item.selectedSize != null ? 'Size: ${item.selectedSize}' : ''} ${item.selectedColor != null ? '| ${item.selectedColor}' : ''}',
-                    style: const TextStyle(fontSize: 10, color: AppColors.textMuted),
+                    style: TextStyle(fontSize: 10, color: context.textMutedColor),
                   ),
                 ],
                 const SizedBox(height: 8),
@@ -238,7 +239,7 @@ class _CartItemCard extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
                         '${item.quantity}',
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: context.textPrimaryColor),
                       ),
                     ),
                     _QtyButton(
@@ -288,11 +289,11 @@ class _QtyButton extends StatelessWidget {
           gradient: isAdd
               ? const LinearGradient(colors: [AppColors.primary, AppColors.primaryLight])
               : null,
-          color: isAdd ? null : AppColors.darkSurface,
+          color: isAdd ? null : context.surfaceColor,
           borderRadius: BorderRadius.circular(8),
-          border: isAdd ? null : Border.all(color: AppColors.darkBorder),
+          border: isAdd ? null : Border.all(color: context.borderColor),
         ),
-        child: Icon(icon, size: 16, color: isAdd ? Colors.white : AppColors.textPrimary),
+        child: Icon(icon, size: 16, color: isAdd ? Colors.white : context.textPrimaryColor),
       ),
     );
   }
@@ -321,7 +322,7 @@ class _PriceRow extends StatelessWidget {
           style: TextStyle(
             fontSize: isBold ? 15 : 13,
             fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
-            color: isBold ? AppColors.textPrimary : AppColors.textSecondary,
+            color: isBold ? context.textPrimaryColor : context.textSecondaryColor,
           ),
         ),
         Text(
@@ -329,7 +330,7 @@ class _PriceRow extends StatelessWidget {
           style: TextStyle(
             fontSize: isBold ? 16 : 13,
             fontWeight: isBold ? FontWeight.w800 : FontWeight.w600,
-            color: valueColor ?? (isBold ? AppColors.primary : AppColors.textPrimary),
+            color: valueColor ?? (isBold ? AppColors.primary : context.textPrimaryColor),
           ),
         ),
       ],
@@ -348,16 +349,16 @@ class _EmptyCart extends StatelessWidget {
             width: 100,
             height: 100,
             decoration: BoxDecoration(
-              color: AppColors.darkSurface,
+              color: context.surfaceColor,
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.darkBorder),
+              border: Border.all(color: context.borderColor),
             ),
-            child: const Icon(Iconsax.shopping_cart, color: AppColors.textMuted, size: 46),
+            child: Icon(Iconsax.shopping_cart, color: context.textMutedColor, size: 46),
           ),
           const SizedBox(height: AppSizes.lg),
-          const Text(AppStrings.emptyCart, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+          Text(AppStrings.emptyCart, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
           const SizedBox(height: 6),
-          const Text(AppStrings.emptyCartSub, style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+          Text(AppStrings.emptyCartSub, style: TextStyle(fontSize: 13, color: context.textSecondaryColor)),
           const SizedBox(height: AppSizes.lg),
           GestureDetector(
             onTap: () => context.go('/explore'),

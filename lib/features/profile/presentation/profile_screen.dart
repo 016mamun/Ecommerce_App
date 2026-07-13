@@ -8,6 +8,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import 'address_book_sheet.dart';
 import 'payment_methods_sheet.dart';
@@ -38,9 +39,9 @@ class ProfileScreen extends ConsumerWidget {
       builder: (_) => Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
-          decoration: const BoxDecoration(
-            color: AppColors.darkSurface,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: context.surfaceColor,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           padding: const EdgeInsets.all(AppSizes.md),
           child: Column(
@@ -51,13 +52,13 @@ class ProfileScreen extends ConsumerWidget {
                 child: Container(
                   width: 40,
                   height: 4,
-                  decoration: BoxDecoration(color: AppColors.darkBorder, borderRadius: BorderRadius.circular(2)),
+                  decoration: BoxDecoration(color: context.borderColor, borderRadius: BorderRadius.circular(2)),
                 ),
               ),
               const SizedBox(height: AppSizes.md),
-              const Text(
+              Text(
                 AppStrings.editProfile,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPrimary),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: context.textPrimaryColor),
               ),
               const SizedBox(height: AppSizes.md),
 
@@ -94,9 +95,9 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: AppSizes.md),
 
-              _buildField('Full Name', nameCtrl, icon: Iconsax.user),
+              _buildField(context, 'Full Name', nameCtrl, icon: Iconsax.user),
               const SizedBox(height: AppSizes.sm),
-              _buildField('Phone Number', phoneCtrl, icon: Iconsax.call),
+              _buildField(context, 'Phone Number', phoneCtrl, icon: Iconsax.call),
               const SizedBox(height: AppSizes.md),
 
               SizedBox(
@@ -107,7 +108,7 @@ class ProfileScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   child: const Text('Save Changes', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
                 ),
               ),
@@ -119,18 +120,18 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildField(String hint, TextEditingController ctrl, {required IconData icon}) {
+  Widget _buildField(BuildContext context, String hint, TextEditingController ctrl, {required IconData icon}) {
     return TextField(
       controller: ctrl,
-      style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+      style: TextStyle(color: context.textPrimaryColor, fontSize: 14),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 13),
-        prefixIcon: Icon(icon, color: AppColors.textMuted, size: 18),
+        hintStyle: TextStyle(color: context.textMutedColor, fontSize: 13),
+        prefixIcon: Icon(icon, color: context.textMutedColor, size: 18),
         filled: true,
-        fillColor: AppColors.darkBg,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.darkBorder)),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.darkBorder)),
+        fillColor: context.bgColor,
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: context.borderColor)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide(color: context.borderColor)),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.primary)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       ),
@@ -142,9 +143,9 @@ class ProfileScreen extends ConsumerWidget {
     final user = ref.watch(currentUserProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg,
+        backgroundColor: context.bgColor,
         title: const Text(AppStrings.myProfile, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
         actions: [
           IconButton(
@@ -238,7 +239,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
 
             const SizedBox(height: AppSizes.lg),
-            const Divider(color: AppColors.darkBorder),
+            Divider(color: context.borderColor),
             const SizedBox(height: AppSizes.lg),
 
             // Options Group 2
@@ -266,24 +267,25 @@ class ProfileScreen extends ConsumerWidget {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder: (_) => AlertDialog(
-                      backgroundColor: AppColors.darkSurface,
-                      title: const Text('Log Out', style: TextStyle(color: AppColors.textPrimary)),
-                      content: const Text(
+                    builder: (dialogContext) => AlertDialog(
+                      backgroundColor: context.surfaceColor,
+                      title: Text('Log Out', style: TextStyle(color: context.textPrimaryColor)),
+                      content: Text(
                         'Are you sure you want to log out?',
-                        style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                        style: TextStyle(color: context.textSecondaryColor, fontSize: 14),
                       ),
                       actions: [
                         TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+                          onPressed: () => Navigator.pop(dialogContext),
+                          child: Text('Cancel', style: TextStyle(color: context.textSecondaryColor)),
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
                           onPressed: () {
-                            Navigator.pop(context);
-                            ref.read(authProvider.notifier).logout();
-                            context.go(AppRoutes.login);
+                            Navigator.pop(dialogContext); // Close dialog
+                            Future.delayed(const Duration(milliseconds: 150), () {
+                              ref.read(authProvider.notifier).logout();
+                            });
                           },
                           child: const Text('Log Out', style: TextStyle(color: Colors.white)),
                         ),
@@ -323,13 +325,13 @@ class _ProfileMenu extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: AppColors.darkSurface,
+          color: context.surfaceColor,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(icon, color: AppColors.textPrimary, size: 20),
+        child: Icon(icon, color: context.textPrimaryColor, size: 20),
       ),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textMuted),
+      trailing: Icon(Icons.arrow_forward_ios, size: 14, color: context.textMutedColor),
     );
   }
 }

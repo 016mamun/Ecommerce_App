@@ -9,6 +9,7 @@ import '../../products/data/models/product_model.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 
 class WishlistScreen extends ConsumerWidget {
@@ -20,9 +21,9 @@ class WishlistScreen extends ConsumerWidget {
     final allProductsAsync = ref.watch(allProductsProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: context.bgColor,
       appBar: AppBar(
-        backgroundColor: AppColors.darkBg,
+        backgroundColor: context.bgColor,
         title: Text(
           '${AppStrings.wishlist} (${wishlistIds.length})',
           style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
@@ -44,16 +45,16 @@ class WishlistScreen extends ConsumerWidget {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: AppColors.darkSurface,
+                      color: context.surfaceColor,
                       shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.darkBorder),
+                      border: Border.all(color: context.borderColor),
                     ),
-                    child: const Icon(Iconsax.heart, color: AppColors.textMuted, size: 46),
+                    child: Icon(Iconsax.heart, color: context.textMutedColor, size: 46),
                   ),
                   const SizedBox(height: AppSizes.lg),
-                  const Text('Your wishlist is empty', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppColors.textPrimary)),
+                  Text('Your wishlist is empty', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: context.textPrimaryColor)),
                   const SizedBox(height: 6),
-                  const Text('Save items you love here', style: TextStyle(fontSize: 13, color: AppColors.textSecondary)),
+                  Text('Save items you love here', style: TextStyle(fontSize: 13, color: context.textSecondaryColor)),
                   const SizedBox(height: AppSizes.lg),
                   GestureDetector(
                     onTap: () => context.go('/explore'),
@@ -114,9 +115,9 @@ class _WishlistProductCard extends ConsumerWidget {
       onTap: () => context.push('/products/${product.id}'),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.darkCard,
+          color: context.cardColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.darkBorder),
+          border: Border.all(color: context.borderColor),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +162,7 @@ class _WishlistProductCard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(product.title, maxLines: 2, overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.textPrimary)),
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: context.textPrimaryColor)),
                   const SizedBox(height: 4),
                   Text('৳${product.price.toStringAsFixed(0)}',
                       style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.primary)),
