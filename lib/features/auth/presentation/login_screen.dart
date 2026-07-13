@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../domain/providers/auth_provider.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
@@ -169,7 +170,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     Expanded(
                       child: _SocialButton(
                         label: 'Google',
-                        icon: '🔵',
+                        iconPath: 'assets/icons/google.svg',
                         onTap: () {},
                       ),
                     ),
@@ -177,7 +178,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     Expanded(
                       child: _SocialButton(
                         label: 'Apple',
-                        icon: '🍎',
+                        iconPath: 'assets/icons/apple.svg',
                         onTap: () {},
                       ),
                     ),
@@ -232,12 +233,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
 class _SocialButton extends StatelessWidget {
   final String label;
-  final String icon;
+  final String iconPath;
   final VoidCallback onTap;
 
   const _SocialButton({
     required this.label,
-    required this.icon,
+    required this.iconPath,
     required this.onTap,
   });
 
@@ -255,7 +256,11 @@ class _SocialButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(icon, style: const TextStyle(fontSize: 18)),
+            SvgPicture.asset(
+              iconPath,
+              width: 20,
+              height: 20,
+            ),
             const SizedBox(width: 8),
             Text(
               label,

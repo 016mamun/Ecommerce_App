@@ -40,6 +40,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> checkAuthStatus() async {
     state = state.copyWith(status: AuthStatus.loading);
     try {
+      // Add delay to show splash screen longer
+      await Future.delayed(const Duration(seconds: 2));
       final token = await _repo.getToken();
       if (token != null) {
         state = state.copyWith(
