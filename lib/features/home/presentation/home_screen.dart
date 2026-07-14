@@ -47,24 +47,38 @@ class HomeScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
               child: Row(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppStrings.goodMorning,
-                        style: TextStyle(fontSize: 13, color: context.textSecondaryColor),
+                  // Menu Bar Icon
+                  GestureDetector(
+                    onTap: () {
+                      // Open drawer or handle menu action
+                    },
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: Colors.indigo.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.indigo.withOpacity(0.2)),
                       ),
-                      Text(
-                        user?['name'] ?? 'Guest',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          color: context.textPrimaryColor,
-                        ),
-                      ),
-                    ],
+                      child: const Icon(Icons.grid_view_rounded, color: Colors.indigo, size: 20),
+                    ),
                   ),
                   const Spacer(),
+                  // Shop Selection Icon
+                  GestureDetector(
+                    onTap: () => context.push(AppRoutes.shopSelection),
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                      ),
+                      child: const Icon(Icons.storefront_outlined, color: AppColors.primary, size: 20),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
                   // Notification Bell
                   GestureDetector(
                     onTap: () => context.push(AppRoutes.notifications),
@@ -72,11 +86,11 @@ class HomeScreen extends ConsumerWidget {
                       width: 42,
                       height: 42,
                       decoration: BoxDecoration(
-                        color: context.surfaceColor,
+                        color: Colors.orange.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: context.borderColor),
+                        border: Border.all(color: Colors.orange.withOpacity(0.2)),
                       ),
-                      child: Icon(Iconsax.notification, color: context.textPrimaryColor, size: 20),
+                      child: const Icon(Iconsax.notification, color: Colors.orange, size: 20),
                     ),
                   ),
                   const SizedBox(width: AppSizes.sm),
@@ -89,11 +103,11 @@ class HomeScreen extends ConsumerWidget {
                           width: 42,
                           height: 42,
                           decoration: BoxDecoration(
-                            color: context.surfaceColor,
+                            color: Colors.teal.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: context.borderColor),
+                            border: Border.all(color: Colors.teal.withOpacity(0.2)),
                           ),
-                          child: Icon(Iconsax.shopping_cart, color: context.textPrimaryColor, size: 20),
+                          child: const Icon(Iconsax.shopping_cart, color: Colors.teal, size: 20),
                         ),
                         if (cartCount > 0)
                           Positioned(
@@ -120,38 +134,6 @@ class HomeScreen extends ConsumerWidget {
                             ),
                           ),
                       ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // ── Mode Selector ────────────────────────────────────────
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.sm),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _ModeCard(
-                      title: AppStrings.lifestyleMode,
-                      subtitle: AppStrings.lifestyleSub,
-                      icon: Iconsax.shop,
-                      gradient: const [AppColors.gradientStart, AppColors.gradientBlue],
-                      isSelected: appMode == AppMode.lifestyle,
-                      onTap: () => ref.read(appModeProvider.notifier).switchTo(AppMode.lifestyle),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _ModeCard(
-                      title: AppStrings.pharmacyMode,
-                      subtitle: AppStrings.pharmacySub,
-                      icon: Iconsax.health,
-                      gradient: const [AppColors.pharmacyGradientStart, AppColors.pharmacyGradientEnd],
-                      isSelected: appMode == AppMode.pharmacy,
-                      onTap: () => ref.read(appModeProvider.notifier).switchTo(AppMode.pharmacy),
                     ),
                   ),
                 ],
@@ -296,83 +278,6 @@ class HomeScreen extends ConsumerWidget {
     ];
   }
 }
-
-// ── Mode Card ───────────────────────────────────────────────────────────────
-class _ModeCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final List<Color> gradient;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _ModeCard({
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.gradient,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? LinearGradient(colors: gradient, begin: Alignment.topLeft, end: Alignment.bottomRight)
-              : null,
-          color: isSelected ? null : context.surfaceColor,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? Colors.transparent : context.borderColor,
-            width: 1.5,
-          ),
-          boxShadow: isSelected
-              ? [BoxShadow(color: gradient.first.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))]
-              : [],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: isSelected ? Colors.white : context.textMutedColor, size: 24),
-                const Spacer(),
-                if (isSelected)
-                  const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: TextStyle(
-                color: isSelected ? Colors.white : context.textPrimaryColor,
-                fontWeight: FontWeight.w800,
-                fontSize: 14,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              subtitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: isSelected ? Colors.white70 : context.textMutedColor,
-                fontSize: 10,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 
 // ── Banner Carousel ─────────────────────────────────────────────────────────
 class _BannerCarousel extends ConsumerStatefulWidget {

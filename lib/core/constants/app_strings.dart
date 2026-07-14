@@ -99,8 +99,8 @@ class AppStrings {
   static const tryAgain = 'Try Again';
 
   // ── Mode Selector ────────────────────────────────────────────────────────
-  static const lifestyleMode = 'Lifestyle';
-  static const pharmacyMode = 'Pharmacy';
+  static const lifestyleMode = 'Ecompounding Chemist';
+  static const pharmacyMode = 'Kersbrook Pharmacy';
   static const lifestyleSub = 'Fashion, Electronics & more';
   static const pharmacySub = 'Medicines & Healthcare';
   static const switchMode = 'Switch Mode';

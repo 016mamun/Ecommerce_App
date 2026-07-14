@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import '../domain/providers/medicine_provider.dart';
 import '../data/models/medicine_model.dart';
 import 'widgets/medicine_card.dart';
+import 'prescription_upload_sheet.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_sizes.dart';
 import '../../../core/constants/app_strings.dart';
@@ -199,6 +200,14 @@ class _PharmacyBannerCarousel extends StatelessWidget {
             'Upload Now',
             [AppColors.pharmacyGradientStart, AppColors.pharmacyGradientEnd],
             Iconsax.document_upload,
+            () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const PrescriptionUploadSheet(),
+              );
+            },
           ),
           _buildBanner(
             context,
@@ -207,6 +216,7 @@ class _PharmacyBannerCarousel extends StatelessWidget {
             'Chat Now',
             [AppColors.pharmacySecondary, AppColors.pharmacyDark],
             Iconsax.messages_2,
+            () => context.push('/pharmacy/ask-pharmacist'),
           ),
         ],
       ),
@@ -214,8 +224,10 @@ class _PharmacyBannerCarousel extends StatelessWidget {
   }
 
   Widget _buildBanner(BuildContext context, String title, String sub,
-      String btn, List<Color> colors, IconData icon) {
-    return Container(
+      String btn, List<Color> colors, IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 6),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -263,6 +275,7 @@ class _PharmacyBannerCarousel extends StatelessWidget {
           ),
           Icon(icon, color: Colors.white.withOpacity(0.5), size: 60),
         ],
+      ),
       ),
     );
   }

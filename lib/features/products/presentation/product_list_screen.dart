@@ -9,6 +9,9 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/product_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
+import '../../../../core/providers/app_mode_provider.dart';
+import '../../pharmacy/domain/providers/medicine_provider.dart';
+import '../../pharmacy/presentation/widgets/medicine_card.dart';
 
 class ProductListScreen extends ConsumerStatefulWidget {
   final String category;
@@ -48,8 +51,12 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appMode = ref.watch(appModeProvider);
+    final isPharmacy = appMode == AppMode.pharmacy;
+    
     final filter = ref.watch(productFilterProvider);
     final productsAsync = ref.watch(filteredProductsProvider);
+    final medicinesAsync = ref.watch(filteredMedicinesProvider);
 
     return Scaffold(
       backgroundColor: context.bgColor,
@@ -60,30 +67,33 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
           child: const Icon(Icons.arrow_back_ios_new, size: 18),
         ),
         title: Text(
-          filter.category.isEmpty ? AppStrings.explore : filter.category,
+          isPharmacy 
+              ? 'Medicines' 
+              : filter.category.isEmpty ? AppStrings.explore : filter.category,
           style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
         ),
         actions: [
-          GestureDetector(
-            onTap: _showFilterSheet,
-            child: Container(
-              margin: const EdgeInsets.only(right: AppSizes.md),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [AppColors.primary, AppColors.primaryLight],
+          if (!isPharmacy)
+            GestureDetector(
+              onTap: _showFilterSheet,
+              child: Container(
+                margin: const EdgeInsets.only(right: AppSizes.md),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [AppColors.primary, AppColors.primaryLight],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Iconsax.setting_4, color: Colors.white, size: 16),
-                  SizedBox(width: 4),
-                  Text('Filter', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
-                ],
+                child: const Row(
+                  children: [
+                    Icon(Iconsax.setting_4, color: Colors.white, size: 16),
+                    SizedBox(width: 4),
+                    Text('Filter', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                  ],
+                ),
               ),
             ),
-          ),
         ],
       ),
       body: Column(
@@ -94,16 +104,26 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
             child: TextField(
               controller: _searchCtrl,
               style: TextStyle(color: context.textPrimaryColor, fontSize: 14),
-              onChanged: (v) => ref.read(searchQueryProvider.notifier).state = v,
+              onChanged: (v) {
+                if (isPharmacy) {
+                  ref.read(medicineSearchQueryProvider.notifier).state = v;
+                } else {
+                  ref.read(searchQueryProvider.notifier).state = v;
+                }
+              },
               decoration: InputDecoration(
-                hintText: AppStrings.searchHint,
+                hintText: isPharmacy ? 'Search medicines...' : AppStrings.searchHint,
                 hintStyle: TextStyle(color: context.textMutedColor, fontSize: 14),
                 prefixIcon: Icon(Iconsax.search_normal, color: context.textMutedColor, size: 20),
                 suffixIcon: _searchCtrl.text.isNotEmpty
                     ? GestureDetector(
                         onTap: () {
                           _searchCtrl.clear();
-                          ref.read(searchQueryProvider.notifier).state = '';
+                          if (isPharmacy) {
+                            ref.read(medicineSearchQueryProvider.notifier).state = '';
+                          } else {
+                            ref.read(searchQueryProvider.notifier).state = '';
+                          }
                           setState(() {});
                         },
                         child: Icon(Icons.close, color: context.textMutedColor, size: 18),
@@ -114,70 +134,119 @@ class _ProductListScreenState extends ConsumerState<ProductListScreen> {
           ),
 
           // Sort Chips
-          SizedBox(
-            height: 36,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-              children: [
-                _SortChip(label: 'Popular', value: 'popularity', current: filter.sortBy),
-                _SortChip(label: 'Price ↑', value: 'price_asc', current: filter.sortBy),
-                _SortChip(label: 'Price ↓', value: 'price_desc', current: filter.sortBy),
-                _SortChip(label: 'Rating', value: 'rating', current: filter.sortBy),
-              ],
-            ),
-          ),
-          const SizedBox(height: AppSizes.md),
-
-          // Products Grid
-          Expanded(
-            child: productsAsync.when(
-              loading: () => GridView.builder(
+          if (!isPharmacy)
+            SizedBox(
+              height: 36,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.72,
-                ),
-                itemCount: 6,
-                itemBuilder: (_, __) => const ShimmerProductCard(),
+                children: [
+                  _SortChip(label: 'Popular', value: 'popularity', current: filter.sortBy),
+                  _SortChip(label: 'Price ↑', value: 'price_asc', current: filter.sortBy),
+                  _SortChip(label: 'Price ↓', value: 'price_desc', current: filter.sortBy),
+                  _SortChip(label: 'Rating', value: 'rating', current: filter.sortBy),
+                ],
               ),
-              error: (_, __) => const Center(
-                child: Text('Something went wrong', style: TextStyle(color: AppColors.textSecondary)),
-              ),
-              data: (products) {
-                if (products.isEmpty) {
-                  return const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Iconsax.search_normal, color: AppColors.textMuted, size: 56),
-                        SizedBox(height: 12),
-                        Text('No products found', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
-                      ],
-                    ),
-                  );
-                }
-                return GridView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.72,
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return ProductCard(
-                      product: product,
-                      onTap: () => context.push('/products/${product.id}'),
-                    );
-                  },
-                );
-              },
             ),
+          if (!isPharmacy) const SizedBox(height: AppSizes.md),
+
+          // Products / Medicines Grid
+          Expanded(
+            child: isPharmacy
+                ? medicinesAsync.when(
+                    loading: () => GridView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.72,
+                      ),
+                      itemCount: 6,
+                      itemBuilder: (_, __) => const ShimmerProductCard(), // We can reuse shimmer for now
+                    ),
+                    error: (_, __) => const Center(
+                      child: Text('Something went wrong', style: TextStyle(color: AppColors.textSecondary)),
+                    ),
+                    data: (medicines) {
+                      if (medicines.isEmpty) {
+                        return const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Iconsax.search_normal, color: AppColors.textMuted, size: 56),
+                              SizedBox(height: 12),
+                              Text('No medicines found', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                            ],
+                          ),
+                        );
+                      }
+                      return GridView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.72,
+                        ),
+                        itemCount: medicines.length,
+                        itemBuilder: (context, index) {
+                          final medicine = medicines[index];
+                          return MedicineCard(
+                            medicine: medicine,
+                            onTap: () => context.push('/pharmacy/medicine/${medicine.id}'),
+                          );
+                        },
+                      );
+                    },
+                  )
+                : productsAsync.when(
+                    loading: () => GridView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.72,
+                      ),
+                      itemCount: 6,
+                      itemBuilder: (_, __) => const ShimmerProductCard(),
+                    ),
+                    error: (_, __) => const Center(
+                      child: Text('Something went wrong', style: TextStyle(color: AppColors.textSecondary)),
+                    ),
+                    data: (products) {
+                      if (products.isEmpty) {
+                        return const Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Iconsax.search_normal, color: AppColors.textMuted, size: 56),
+                              SizedBox(height: 12),
+                              Text('No products found', style: TextStyle(color: AppColors.textSecondary, fontSize: 16)),
+                            ],
+                          ),
+                        );
+                      }
+                      return GridView.builder(
+                        padding: const EdgeInsets.symmetric(horizontal: AppSizes.md),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.72,
+                        ),
+                        itemCount: products.length,
+                        itemBuilder: (context, index) {
+                          final product = products[index];
+                          return ProductCard(
+                            product: product,
+                            onTap: () => context.push('/products/${product.id}'),
+                          );
+                        },
+                      );
+                    },
+                  ),
           ),
         ],
       ),

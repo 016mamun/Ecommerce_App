@@ -13,6 +13,7 @@ import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
+import '../../../../core/providers/app_mode_provider.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
   const CartScreen({super.key});
@@ -52,6 +53,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     final discount = ref.watch(promoDiscountProvider);
     final rxFee = ref.watch(cartRxFeeProvider);
     final total = ref.watch(cartTotalProvider);
+    final appMode = ref.watch(appModeProvider);
+    final isPharmacy = appMode == AppMode.pharmacy;
 
     return Scaffold(
       backgroundColor: context.bgColor,
@@ -122,8 +125,10 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [AppColors.primary, AppColors.primaryLight],
+                                gradient: LinearGradient(
+                                  colors: isPharmacy 
+                                      ? [AppColors.pharmacyGradientStart, AppColors.pharmacyGradientEnd]
+                                      : [AppColors.primary, AppColors.primaryLight],
                                 ),
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -172,6 +177,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
 
                       GradientButton(
                         label: AppStrings.proceedToCheckout,
+                        colors: isPharmacy 
+                            ? [AppColors.pharmacyGradientStart, AppColors.pharmacyGradientEnd]
+                            : const [AppColors.primary, AppColors.primaryLight],
                         onPressed: () => context.push(AppRoutes.checkout),
                       ),
                     ],
@@ -346,9 +354,12 @@ class _PriceRow extends StatelessWidget {
   }
 }
 
-class _EmptyCart extends StatelessWidget {
+class _EmptyCart extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appMode = ref.watch(appModeProvider);
+    final isPharmacy = appMode == AppMode.pharmacy;
+    
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -373,7 +384,11 @@ class _EmptyCart extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [AppColors.primary, AppColors.primaryLight]),
+                gradient: LinearGradient(
+                  colors: isPharmacy 
+                      ? [AppColors.pharmacyGradientStart, AppColors.pharmacyGradientEnd]
+                      : [AppColors.primary, AppColors.primaryLight]
+                ),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: const Text('Start Shopping', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),

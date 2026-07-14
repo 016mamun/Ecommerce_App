@@ -18,6 +18,7 @@ import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/pharmacy/presentation/ask_pharmacist_screen.dart';
 import '../../features/pharmacy/presentation/dosage_reminder_screen.dart';
 import '../../features/pharmacy/presentation/medicine_details_view.dart';
+import '../../features/home/presentation/shop_selection_screen.dart';
 import '../widgets/main_shell.dart';
 
 // Route names
@@ -25,6 +26,7 @@ class AppRoutes {
   static const splash = '/';
   static const login = '/login';
   static const signup = '/signup';
+  static const shopSelection = '/shop-selection';
   static const home = '/home';
   static const explore = '/explore';
   static const cart = '/cart';
@@ -58,8 +60,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       if (!isAuth && !authRoutes.contains(location) && location != AppRoutes.splash) {
         return AppRoutes.login;
       }
-      if (isAuth && authRoutes.contains(location)) {
-        return AppRoutes.home;
+      if (isAuth && authRoutes.contains(location) || (isAuth && location == AppRoutes.splash)) {
+        return AppRoutes.shopSelection;
       }
       return null;
     },
@@ -72,6 +74,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Auth
       GoRoute(path: AppRoutes.login, builder: (_, __) => const LoginScreen()),
       GoRoute(path: AppRoutes.signup, builder: (_, __) => const SignupScreen()),
+
+      // Shop Selection
+      GoRoute(path: AppRoutes.shopSelection, builder: (_, __) => const ShopSelectionScreen()),
 
       // Main shell with bottom nav
       ShellRoute(

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import '../router/app_router.dart';
 import '../theme/app_theme_colors.dart';
+import '../providers/app_mode_provider.dart';
 
-class MainShell extends StatelessWidget {
+class MainShell extends ConsumerWidget {
   final Widget child;
   const MainShell({super.key, required this.child});
 
@@ -20,9 +22,11 @@ class MainShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final location = GoRouterState.of(context).uri.toString();
     final currentIndex = _locationToIndex(location);
+    final appMode = ref.watch(appModeProvider);
+    final activeColor = appMode == AppMode.pharmacy ? AppColors.pharmacyGradientEnd : AppColors.primary;
 
     return Scaffold(
       body: child,
@@ -41,6 +45,7 @@ class MainShell extends StatelessWidget {
                   activeIcon: Iconsax.home_15,
                   label: AppStrings.home,
                   isActive: currentIndex == 0,
+                  activeColor: activeColor,
                   onTap: () => context.go(AppRoutes.home),
                 ),
                 _NavItem(
@@ -48,6 +53,7 @@ class MainShell extends StatelessWidget {
                   activeIcon: Iconsax.search_normal_15,
                   label: AppStrings.explore,
                   isActive: currentIndex == 1,
+                  activeColor: activeColor,
                   onTap: () => context.go(AppRoutes.explore),
                 ),
                 _NavItem(
@@ -55,6 +61,7 @@ class MainShell extends StatelessWidget {
                   activeIcon: Iconsax.shopping_cart5,
                   label: AppStrings.cart,
                   isActive: currentIndex == 2,
+                  activeColor: activeColor,
                   onTap: () => context.go(AppRoutes.cart),
                 ),
                 _NavItem(
@@ -62,6 +69,7 @@ class MainShell extends StatelessWidget {
                   activeIcon: Iconsax.heart5,
                   label: AppStrings.wishlist,
                   isActive: currentIndex == 3,
+                  activeColor: activeColor,
                   onTap: () => context.go(AppRoutes.wishlist),
                 ),
                 _NavItem(
@@ -69,6 +77,7 @@ class MainShell extends StatelessWidget {
                   activeIcon: Icons.person,
                   label: AppStrings.profile,
                   isActive: currentIndex == 4,
+                  activeColor: activeColor,
                   onTap: () => context.go(AppRoutes.profile),
                 ),
               ],
@@ -85,6 +94,7 @@ class _NavItem extends StatelessWidget {
   final IconData activeIcon;
   final String label;
   final bool isActive;
+  final Color activeColor;
   final VoidCallback onTap;
 
   const _NavItem({
@@ -92,6 +102,7 @@ class _NavItem extends StatelessWidget {
     required this.activeIcon,
     required this.label,
     required this.isActive,
+    required this.activeColor,
     required this.onTap,
   });
 
@@ -112,7 +123,7 @@ class _NavItem extends StatelessWidget {
                 child: Icon(
                   isActive ? activeIcon : icon,
                   key: ValueKey(isActive),
-                  color: isActive ? AppColors.primary : context.textMutedColor,
+                  color: isActive ? activeColor : context.textMutedColor,
                   size: 22,
                 ),
               ),
@@ -122,7 +133,7 @@ class _NavItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                  color: isActive ? AppColors.primary : context.textMutedColor,
+                  color: isActive ? activeColor : context.textMutedColor,
                 ),
               ),
             ],

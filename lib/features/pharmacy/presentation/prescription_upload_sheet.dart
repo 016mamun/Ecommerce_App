@@ -106,24 +106,26 @@ class _PrescriptionUploadSheetState extends State<PrescriptionUploadSheet>
                     color: Colors.white, size: 22),
               ),
               const SizedBox(width: 14),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    AppStrings.uploadPrescription,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: context.textPrimaryColor,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppStrings.uploadPrescription,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: context.textPrimaryColor,
+                      ),
                     ),
-                  ),
-                  Text(
-                    AppStrings.prescriptionNote,
-                    style: TextStyle(
-                        fontSize: 11, color: context.textMutedColor),
-                    maxLines: 2,
-                  ),
-                ],
+                    Text(
+                      AppStrings.prescriptionNote,
+                      style: TextStyle(
+                          fontSize: 11, color: context.textMutedColor),
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

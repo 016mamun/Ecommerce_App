@@ -11,14 +11,18 @@ import '../../../../core/constants/app_sizes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
+import '../../../../core/providers/app_mode_provider.dart';
+import '../../pharmacy/domain/providers/medicine_provider.dart';
+import '../../pharmacy/presentation/widgets/medicine_card.dart';
 
 class WishlistScreen extends ConsumerWidget {
   const WishlistScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final appMode = ref.watch(appModeProvider);
+    final isPharmacy = appMode == AppMode.pharmacy;
     final wishlistIds = ref.watch(wishlistProvider);
-    final allProductsAsync = ref.watch(allProductsProvider);
 
     return Scaffold(
       backgroundColor: context.bgColor,
@@ -61,46 +65,88 @@ class WishlistScreen extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(colors: [AppColors.secondary, AppColors.primary]),
+                        gradient: LinearGradient(
+                          colors: isPharmacy 
+                              ? [AppColors.pharmacyGradientStart, AppColors.pharmacyGradientEnd]
+                              : [AppColors.secondary, AppColors.primary],
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Text('Explore Products', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                      child: Text(
+                        isPharmacy ? 'Explore Medicines' : 'Explore Products',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
                 ],
               ),
             )
-          : allProductsAsync.when(
-              loading: () => GridView.builder(
-                padding: const EdgeInsets.all(AppSizes.md),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.72,
-                ),
-                itemCount: 4,
-                itemBuilder: (_, __) => const ShimmerProductCard(),
-              ),
-              error: (_, __) => const Center(child: Text('Error loading wishlist')),
-              data: (allProducts) {
-                final wishlistProducts = allProducts.where((p) => wishlistIds.contains(p.id)).toList();
-                return GridView.builder(
-                  padding: const EdgeInsets.all(AppSizes.md),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.72,
+          : isPharmacy 
+              ? ref.watch(allMedicinesProvider).when(
+                  loading: () => GridView.builder(
+                    padding: const EdgeInsets.all(AppSizes.md),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 0.72,
+                    ),
+                    itemCount: 4,
+                    itemBuilder: (_, __) => const ShimmerProductCard(), // Reusing product shimmer
                   ),
-                  itemCount: wishlistProducts.length,
-                  itemBuilder: (context, index) {
-                    final product = wishlistProducts[index];
-                    return _WishlistProductCard(product: product);
+                  error: (_, __) => const Center(child: Text('Error loading wishlist')),
+                  data: (allMedicines) {
+                    final wishlistMedicines = allMedicines.where((m) => wishlistIds.contains(m.id)).toList();
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(AppSizes.md),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.72,
+                      ),
+                      itemCount: wishlistMedicines.length,
+                      itemBuilder: (context, index) {
+                        final medicine = wishlistMedicines[index];
+                        return MedicineCard(
+                          medicine: medicine,
+                          onTap: () => context.push('/pharmacy/medicine/${medicine.id}'),
+                        );
+                      },
+                    );
                   },
-                );
-              },
-            ),
+                )
+              : ref.watch(allProductsProvider).when(
+                  loading: () => GridView.builder(
+                    padding: const EdgeInsets.all(AppSizes.md),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 0.72,
+                    ),
+                    itemCount: 4,
+                    itemBuilder: (_, __) => const ShimmerProductCard(),
+                  ),
+                  error: (_, __) => const Center(child: Text('Error loading wishlist')),
+                  data: (allProducts) {
+                    final wishlistProducts = allProducts.where((p) => wishlistIds.contains(p.id)).toList();
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(AppSizes.md),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.72,
+                      ),
+                      itemCount: wishlistProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = wishlistProducts[index];
+                        return _WishlistProductCard(product: product);
+                      },
+                    );
+                  },
+                ),
     );
   }
 }
