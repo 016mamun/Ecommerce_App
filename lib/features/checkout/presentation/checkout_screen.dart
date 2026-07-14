@@ -350,6 +350,11 @@ class _OrderSummaryStep extends ConsumerWidget {
     final cartItems = ref.watch(cartProvider);
     final currency = NumberFormat.currency(locale: 'en_US', symbol: '৳');
 
+    final subtotal = ref.watch(cartSubtotalProvider);
+    final delivery = ref.watch(cartDeliveryFeeProvider);
+    final tax = ref.watch(cartTaxProvider);
+    final rxFee = ref.watch(cartRxFeeProvider);
+    final discount = ref.watch(promoDiscountProvider);
     final total = ref.watch(cartTotalProvider);
 
     return ListView(
@@ -404,6 +409,53 @@ class _OrderSummaryStep extends ConsumerWidget {
                 ],
               ),
             )),
+        const SizedBox(height: AppSizes.md),
+        
+        // Breakdown
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Subtotal', style: TextStyle(color: context.textSecondaryColor, fontSize: 13)),
+            Text(currency.format(subtotal), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Delivery', style: TextStyle(color: context.textSecondaryColor, fontSize: 13)),
+            Text(delivery == 0 ? 'Free' : currency.format(delivery), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: delivery == 0 ? AppColors.success : null)),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Tax (5%)', style: TextStyle(color: context.textSecondaryColor, fontSize: 13)),
+            Text(currency.format(tax), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          ],
+        ),
+        if (rxFee > 0) ...[
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Rx Verification Fee', style: TextStyle(color: context.textSecondaryColor, fontSize: 13)),
+              Text(currency.format(rxFee), style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+            ],
+          ),
+        ],
+        if (discount > 0) ...[
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Discount', style: TextStyle(color: AppColors.success, fontSize: 13)),
+              Text('-${currency.format(discount)}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: AppColors.success)),
+            ],
+          ),
+        ],
+        
         const SizedBox(height: AppSizes.lg),
         Divider(color: context.borderColor),
         const SizedBox(height: 8),

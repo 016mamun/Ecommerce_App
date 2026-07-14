@@ -50,6 +50,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     final delivery = ref.watch(cartDeliveryFeeProvider);
     final tax = ref.watch(cartTaxProvider);
     final discount = ref.watch(promoDiscountProvider);
+    final rxFee = ref.watch(cartRxFeeProvider);
     final total = ref.watch(cartTotalProvider);
 
     return Scaffold(
@@ -146,6 +147,13 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                       ),
                       const SizedBox(height: 6),
                       _PriceRow(label: AppStrings.tax, value: currency.format(tax)),
+                      if (rxFee > 0) ...[
+                        const SizedBox(height: 6),
+                        _PriceRow(
+                          label: 'Rx Verification Fee',
+                          value: currency.format(rxFee),
+                        ),
+                      ],
                       if (discount > 0) ...[
                         const SizedBox(height: 6),
                         _PriceRow(

@@ -90,6 +90,15 @@ final cartTaxProvider = Provider<double>((ref) {
   return subtotal * 0.05; // 5% VAT
 });
 
+final cartRequiresRxProvider = Provider<bool>((ref) {
+  return ref.watch(cartProvider).any((item) => item.isRxRequired);
+});
+
+final cartRxFeeProvider = Provider<double>((ref) {
+  final requiresRx = ref.watch(cartRequiresRxProvider);
+  return requiresRx ? 50.0 : 0.0; // Flat ৳50 verification fee
+});
+
 final promoDiscountProvider = StateProvider<double>((ref) => 0.0);
 final appliedPromoCodeProvider = StateProvider<String?>((ref) => null);
 
@@ -97,8 +106,9 @@ final cartTotalProvider = Provider<double>((ref) {
   final subtotal = ref.watch(cartSubtotalProvider);
   final delivery = ref.watch(cartDeliveryFeeProvider);
   final tax = ref.watch(cartTaxProvider);
+  final rxFee = ref.watch(cartRxFeeProvider);
   final discount = ref.watch(promoDiscountProvider);
-  return subtotal + delivery + tax - discount;
+  return subtotal + delivery + tax + rxFee - discount;
 });
 
 // Promo Code logic

@@ -17,6 +17,9 @@ import '../../../../core/theme/app_theme_colors.dart';
 import '../../../../core/widgets/product_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 
+import '../../../../core/providers/app_mode_provider.dart';
+import '../../pharmacy/presentation/pharmacy_home_view.dart';
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -24,6 +27,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final cartCount = ref.watch(cartCountProvider);
+    final appMode = ref.watch(appModeProvider);
 
     return Scaffold(
       backgroundColor: context.bgColor,
@@ -123,6 +127,52 @@ class HomeScreen extends ConsumerWidget {
             ),
           ),
 
+          // ── Mode Selector ────────────────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSizes.md, vertical: AppSizes.sm),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _ModeCard(
+                      title: AppStrings.lifestyleMode,
+                      subtitle: AppStrings.lifestyleSub,
+                      icon: Iconsax.shop,
+                      gradient: const [AppColors.gradientStart, AppColors.gradientBlue],
+                      isSelected: appMode == AppMode.lifestyle,
+                      onTap: () => ref.read(appModeProvider.notifier).switchTo(AppMode.lifestyle),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _ModeCard(
+                      title: AppStrings.pharmacyMode,
+                      subtitle: AppStrings.pharmacySub,
+                      icon: Iconsax.health,
+                      gradient: const [AppColors.pharmacyGradientStart, AppColors.pharmacyGradientEnd],
+                      isSelected: appMode == AppMode.pharmacy,
+                      onTap: () => ref.read(appModeProvider.notifier).switchTo(AppMode.pharmacy),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ── Conditional Content ──────────────────────────────────
+          if (appMode == AppMode.pharmacy)
+            const SliverFillRemaining(
+              child: PharmacyHomeView(),
+            )
+          else
+            ..._buildLifestyleSlivers(context),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildLifestyleSlivers(BuildContext context) {
+    return [
           // ── Search Bar ────────────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
@@ -243,11 +293,86 @@ class HomeScreen extends ConsumerWidget {
           _NewArrivalsGrid(),
 
           const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
-        ],
+    ];
+  }
+}
+
+// ── Mode Card ───────────────────────────────────────────────────────────────
+class _ModeCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final List<Color> gradient;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _ModeCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.gradient,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          gradient: isSelected
+              ? LinearGradient(colors: gradient, begin: Alignment.topLeft, end: Alignment.bottomRight)
+              : null,
+          color: isSelected ? null : context.surfaceColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? Colors.transparent : context.borderColor,
+            width: 1.5,
+          ),
+          boxShadow: isSelected
+              ? [BoxShadow(color: gradient.first.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4))]
+              : [],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: isSelected ? Colors.white : context.textMutedColor, size: 24),
+                const Spacer(),
+                if (isSelected)
+                  const Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: TextStyle(
+                color: isSelected ? Colors.white : context.textPrimaryColor,
+                fontWeight: FontWeight.w800,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              subtitle,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: isSelected ? Colors.white70 : context.textMutedColor,
+                fontSize: 10,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
 
 // ── Banner Carousel ─────────────────────────────────────────────────────────
 class _BannerCarousel extends ConsumerStatefulWidget {

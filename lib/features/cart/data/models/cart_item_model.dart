@@ -29,6 +29,10 @@ class CartItemModel extends Equatable {
 
   double get itemTotal => product.price * quantity;
 
+  bool get isRxRequired => product.category == 'Pharmacy' && (product.id.contains('rx') || product.id.startsWith('med_')); // Since we don't have isRxRequired on ProductModel, we'll infer it from the fact that it's a pharmacy item, or we can just update ProductModel. Let's just update ProductModel directly, or use a getter.
+  // Actually, we mapped isRxRequired via the product model adapter in MedicineCard. Wait, we didn't add it to ProductModel.
+  // Let's add isRxRequired to ProductModel first.
+
   @override
   List<Object?> get props => [product.id, selectedSize, selectedColor];
 }

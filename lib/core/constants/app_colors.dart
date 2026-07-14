@@ -42,4 +42,21 @@ class AppColors {
 
   static const flashSaleStart = Color(0xFFFF6584);
   static const flashSaleEnd = Color(0xFFFF8E53);
+
+  // ── Pharmacy Mode Palette ────────────────────────────────────────────────
+  static const pharmacyPrimary = Color(0xFF00B894);   // emerald green
+  static const pharmacySecondary = Color(0xFF00CEC9); // teal
+  static const pharmacyDark = Color(0xFF00897B);      // deep teal
+  static const pharmacyLight = Color(0xFFE0F7F4);     // very light teal
+  static const pharmacyAccent = Color(0xFF55EFC4);    // mint
+
+  // Badge colors
+  static const rxBadge = Color(0xFFD63031);           // prescription — red
+  static const otcBadge = Color(0xFF0984E3);          // over-the-counter — blue
+  static const herbalBadge = Color(0xFF00B894);       // herbal — green
+  static const personalCareBadge = Color(0xFFE17055); // personal care — warm orange
+
+  // Pharmacy gradient pair
+  static const pharmacyGradientStart = Color(0xFF00B894);
+  static const pharmacyGradientEnd = Color(0xFF00CEC9);
 }

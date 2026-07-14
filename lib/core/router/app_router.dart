@@ -15,6 +15,9 @@ import '../../features/orders/presentation/order_history_screen.dart';
 import '../../features/orders/presentation/order_tracking_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
+import '../../features/pharmacy/presentation/ask_pharmacist_screen.dart';
+import '../../features/pharmacy/presentation/dosage_reminder_screen.dart';
+import '../../features/pharmacy/presentation/medicine_details_view.dart';
 import '../widgets/main_shell.dart';
 
 // Route names
@@ -107,6 +110,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // Notifications
       GoRoute(path: AppRoutes.notifications, builder: (_, __) => const NotificationsScreen()),
+
+      // Pharmacy
+      GoRoute(path: '/pharmacy/ask-pharmacist', builder: (_, __) => const AskPharmacistScreen()),
+      GoRoute(path: '/pharmacy/dosage-reminders', builder: (_, __) => const DosageReminderScreen()),
+      GoRoute(
+        path: '/pharmacy/medicines/:id',
+        builder: (_, state) => MedicineDetailsView(
+          medicineId: state.pathParameters['id'] ?? '',
+        ),
+      ),
     ],
   );
 });

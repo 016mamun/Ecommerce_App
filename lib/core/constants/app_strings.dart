@@ -97,4 +97,68 @@ class AppStrings {
   static const somethingWentWrong = 'Something went wrong';
   static const noInternetConnection = 'No internet connection';
   static const tryAgain = 'Try Again';
+
+  // ── Mode Selector ────────────────────────────────────────────────────────
+  static const lifestyleMode = 'Lifestyle';
+  static const pharmacyMode = 'Pharmacy';
+  static const lifestyleSub = 'Fashion, Electronics & more';
+  static const pharmacySub = 'Medicines & Healthcare';
+  static const switchMode = 'Switch Mode';
+
+  // ── Pharmacy — General ───────────────────────────────────────────────────
+  static const pharmacyHome = 'MedStore';
+  static const searchMedicineHint = 'Search medicines, generics...';
+  static const featuredMedicines = 'Featured Medicines';
+  static const allMedicines = 'All Medicines';
+  static const medicineDetails = 'Medicine Details';
+  static const genericName = 'Generic Name';
+  static const brandName = 'Brand Name';
+  static const strength = 'Strength';
+  static const manufacturer = 'Manufacturer';
+  static const category = 'Category';
+
+  // ── Pharmacy — Detail Tabs ───────────────────────────────────────────────
+  static const overview = 'Overview';
+  static const indications = 'Indications';
+  static const sideEffects = 'Side Effects';
+  static const warnings = 'Warnings';
+  static const dosage = 'Dosage';
+
+  // ── Pharmacy — Rx Flow ───────────────────────────────────────────────────
+  static const rxRequired = 'Rx Required';
+  static const uploadPrescription = 'Upload Prescription';
+  static const prescriptionRequired = 'Prescription Required';
+  static const prescriptionNote =
+      'This medicine requires a valid prescription from a licensed doctor.';
+  static const uploadFromCamera = 'Take a Photo';
+  static const uploadFromGallery = 'Choose from Gallery';
+  static const uploadFromFiles = 'Browse Files';
+  static const submitPrescription = 'Submit Prescription';
+  static const prescriptionUploaded = 'Prescription uploaded successfully!';
+
+  // ── Pharmacy — Ask a Pharmacist ──────────────────────────────────────────
+  static const askPharmacist = 'Ask a Pharmacist';
+  static const pharmacistSubtitle = 'Chat with a certified virtual pharmacist';
+  static const typeMessage = 'Type your question...';
+  static const pharmacistTyping = 'Pharmacist is typing...';
+  static const pharmacistGreeting =
+      'Hello! I\'m Dr. Nadia, your virtual pharmacist. How can I help you today? '
+      'Ask me about any medicine, dosage, side effects, or drug interactions.';
+
+  // ── Pharmacy — Dosage Reminder ───────────────────────────────────────────
+  static const dosageReminder = 'Dosage Reminders';
+  static const addReminder = 'Add Reminder';
+  static const medicineName = 'Medicine Name';
+  static const reminderTime = 'Reminder Time';
+  static const frequency = 'Frequency';
+  static const noReminders = 'No reminders set';
+  static const noRemindersSub = 'Tap + to add your first medicine reminder';
+  static const reminderAdded = 'Reminder added!';
+  static const reminderDeleted = 'Reminder deleted';
+
+  // ── Pharmacy — Cart notices ──────────────────────────────────────────────
+  static const rxVerificationFee = 'Rx Verification Fee';
+  static const rxVerificationNote =
+      'Your cart contains prescription medicines. A one-time verification fee is applied.';
 }
+
